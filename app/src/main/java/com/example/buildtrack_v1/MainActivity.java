@@ -11,6 +11,14 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         CheckBox cbShowPassword = findViewById(R.id.cbShowPassword);
         RadioGroup rgRole = findViewById(R.id.rgRole);
         Button btnRegister = findViewById(R.id.btnRegister);
+
+
 
         // Part A: Show password checkbox
         cbShowPassword.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 String lastName = etLastName.getText().toString().trim();
                 String email = etEmail.getText().toString().trim();
                 String password = etPassword.getText().toString();
+                String finalEmail = email.toLowerCase(Locale.ROOT);
 
                 // return after each error: only the first bad field gets the focus,
                 // and nothing moves on with bad data
@@ -122,8 +134,36 @@ public class MainActivity extends AppCompatActivity {
                 ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Step 3 replaces this Toast with the Firebase save
-                        Toast.makeText(MainActivity.this, "Valid: " + finalName + " / " + finalRole, Toast.LENGTH_LONG).show();
+
+                        btnRegister.setEnabled(false);
+                        Toast.makeText(MainActivity.this, "Creating account...", Toast.LENGTH_LONG).show();
+
+                        FirebaseAuth auth = FirebaseAuth.getInstance();
+                        auth.createUserWithEmailAndPassword(finalEmail, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    String uid = task.getResult().getUser().getUid();
+                                    UserInfo info = new UserInfo(finalName, finalEmail, finalRole);
+
+                                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
+                                    reference.child(uid).setValue(info).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task2) {
+                                            btnRegister.setEnabled(true);
+                                            if (task2.isSuccessful()) {
+                                                Toast.makeText(MainActivity.this, "Account created", Toast.LENGTH_LONG).show();
+                                            } else {
+                                                showError("Could not save profile", task2.getException().getMessage());
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    btnRegister.setEnabled(true);
+                                    showError("Registration failed", task.getException().getMessage());
+                                }
+                            }
+                        });
                     }
                 });
 
@@ -172,5 +212,18 @@ public class MainActivity extends AppCompatActivity {
             return "Add at least 1 special character (@ # $ % &)";
         }
         return null;
+    }
+
+    private void showError(String title, String message) {
+        AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
+        ad.setTitle(title);
+        ad.setMessage(message);
+        ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        ad.show();
     }
 }
