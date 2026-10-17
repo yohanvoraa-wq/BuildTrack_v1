@@ -23,9 +23,15 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+    Button btnRegister, btnLogin;
 
 
     @Override
@@ -40,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
         EditText etPassword = findViewById(R.id.etPassword);
         CheckBox cbShowPassword = findViewById(R.id.cbShowPassword);
         RadioGroup rgRole = findViewById(R.id.rgRole);
-        Button btnRegister = findViewById(R.id.btnRegister);
+
+        btnRegister = findViewById(R.id.btnRegister);
+        btnLogin = findViewById(R.id.btnLogin);
 
 
 
@@ -178,6 +186,52 @@ public class MainActivity extends AppCompatActivity {
                 ad.show();
             }
         });
+
+        // Part C: Login button = validate, sign in, then route by role
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String email = etEmail.getText().toString().trim();
+                String password = etPassword.getText().toString();
+
+                if (!email.matches("[a-zA-Z0-9]+([._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}")) {
+                    etEmail.requestFocus();
+                    etEmail.setError("Enter a valid email, e.g. name@gmail.com");
+                    return;
+                }
+
+                // strength rules apply only at registration, so login just needs something typed
+                if (password.length() == 0) {
+                    etPassword.requestFocus();
+                    etPassword.setError("Password cannot be empty");
+                    return;
+                }
+
+                setButtonsEnabled(false);
+                Toast.makeText(MainActivity.this, "Logging in...", Toast.LENGTH_LONG).show();
+
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email.toLowerCase(Locale.ROOT), password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    routeUser(task.getResult().getUser().getUid());
+                                } else {
+                                    setButtonsEnabled(true);
+                                    showError("Login failed", task.getException().getMessage());
+                                }
+                            }
+                        });
+            }
+        });
+
+        // if someone is already signed in, skip the form and go straight to their home screen
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            setButtonsEnabled(false);
+            routeUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        }
+
     }
 
     // Returns null when the password is fine, otherwise a message for the FIRST rule broken
@@ -225,5 +279,55 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         ad.show();
+    }
+
+    private void setButtonsEnabled(boolean enabled) {
+        btnRegister.setEnabled(enabled);
+        btnLogin.setEnabled(enabled);
+    }
+
+    // reads users/{uid}, then opens the home screen that matches the role
+    private void routeUser(String uid) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users").child(uid);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserInfo info = snapshot.getValue(UserInfo.class);
+                if (info == null || info.getRole() == null) {
+                    // the account exists in Auth, but its profile is missing from the database
+                    FirebaseAuth.getInstance().signOut();
+                    setButtonsEnabled(true);
+                    showError("Profile not found", "This account has no saved profile. Delete it in Firebase Authentication and register again.");
+                } else {
+                    openHome(info.getRole(), info.getName());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                FirebaseAuth.getInstance().signOut();
+                setButtonsEnabled(true);
+                showError("Could not load profile", error.getMessage());
+            }
+        });
+    }
+
+    // opens the right home screen and hands the name over inside the Intent
+    private void openHome(String role, String name) {
+        Intent i;
+        if (role.equals("manager")) {
+            i = new Intent(MainActivity.this, ManagerHomeActivity.class);
+        } else if (role.equals("engineer")) {
+            i = new Intent(MainActivity.this, EngineerHomeActivity.class);
+        } else if (role.equals("buyer")) {
+            i = new Intent(MainActivity.this, BuyerHomeActivity.class);
+        } else {
+            setButtonsEnabled(true);
+            showError("Unknown role", "Saved role not recognised: " + role);
+            return;
+        }
+        i.putExtra("name", name);
+        startActivity(i);
+        finish();
     }
 }
