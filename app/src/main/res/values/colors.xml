@@ -2,4 +2,15 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="navy_dark">#0A1A33</color>
+    <color name="navy">#10294D</color>
+    <color name="navy_light">#1B3A6B</color>
+    <color name="gold">#D4AF37</color>
+    <color name="yellow">#FFD54F</color>
+    <color name="gold_tint">#FFF6D6</color>
+    <color name="cream">#F7F5EE</color>
+    <color name="ink">#121212</color>
+    <color name="grey_text">#5F6B7A</color>
+    <color name="grey_line">#C9CED6</color>
+    <color name="header_sub">#C9D3E3</color>
 </resources>
