@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cream"
+    android:background="@color/purple_dark"
     android:fillViewport="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Navy header -->
         <View
             android:id="@+id/headerBg"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:background="@drawable/bg_header" />
+            android:background="@drawable/bg_header_purple" />
 
         <TextView
             android:id="@+id/tvBuild"
@@ -56,10 +56,9 @@
             android:layout_marginStart="28dp"
             android:layout_marginTop="8dp"
             android:text="Construction progress, made transparent"
-            android:textColor="@color/header_sub"
+            android:textColor="@color/purple_light"
             android:textSize="14sp" />
 
-        <!-- White card that floats over the header -->
         <RelativeLayout
             android:id="@+id/cardForm"
             android:layout_width="match_parent"
@@ -77,7 +76,7 @@
                 android:id="@+id/tvWelcome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Create your account"
+                android:text="Welcome back"
                 android:textColor="@color/navy"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -88,42 +87,16 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvWelcome"
                 android:layout_marginTop="4dp"
-                android:text="Register, or log in if you already have an account"
+                android:text="Select your role and log in"
                 android:textColor="@color/grey_text"
                 android:textSize="13sp" />
-
-            <EditText
-                android:id="@+id/etFirstName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvHint"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_input"
-                android:hint="First name (required)"
-                android:inputType="textPersonName"
-                android:textColor="@color/ink"
-                android:textColorHint="@color/grey_text"
-                android:textSize="15sp" />
-
-            <EditText
-                android:id="@+id/etLastName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/etFirstName"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_input"
-                android:hint="Last name (optional)"
-                android:inputType="textPersonName"
-                android:textColor="@color/ink"
-                android:textColorHint="@color/grey_text"
-                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/etLastName"
-                android:layout_marginTop="12dp"
+                android:layout_below="@id/tvHint"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/bg_input"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
@@ -161,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cbShowPassword"
                 android:layout_marginTop="16dp"
-                android:text="I am a"
+                android:text="Log in as"
                 android:textColor="@color/navy"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -181,7 +154,7 @@
                     android:layout_marginTop="8dp"
                     android:background="@drawable/bg_role_option"
                     android:buttonTint="@color/gold"
-                    android:minHeight="52dp"
+                    android:minHeight="48dp"
                     android:paddingStart="12dp"
                     android:text="Manager"
                     android:textColor="@color/ink" />
@@ -193,7 +166,7 @@
                     android:layout_marginTop="8dp"
                     android:background="@drawable/bg_role_option"
                     android:buttonTint="@color/gold"
-                    android:minHeight="52dp"
+                    android:minHeight="48dp"
                     android:paddingStart="12dp"
                     android:text="On-Site Engineer"
                     android:textColor="@color/ink" />
@@ -205,50 +178,42 @@
                     android:layout_marginTop="8dp"
                     android:background="@drawable/bg_role_option"
                     android:buttonTint="@color/gold"
-                    android:minHeight="52dp"
+                    android:minHeight="48dp"
                     android:paddingStart="12dp"
                     android:text="Buyer"
                     android:textColor="@color/ink" />
             </RadioGroup>
 
             <Button
-                android:id="@+id/btnRegister"
+                android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_below="@id/rgRole"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/bg_button_gold"
-                android:backgroundTint="@null"
-                android:text="Register"
+                android:text="Login"
                 android:textAllCaps="false"
                 android:textColor="@color/navy_dark"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:backgroundTint="@color/gold"
+                app:cornerRadius="14dp" />
 
             <Button
-                android:id="@+id/btnLogin"
+                android:id="@+id/btnGoRegister"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_below="@id/btnRegister"
+                android:layout_below="@id/btnLogin"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/bg_button_outline"
-                android:backgroundTint="@null"
-                android:text="Login"
+                android:text="Create an account"
                 android:textAllCaps="false"
                 android:textColor="@color/navy"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:backgroundTint="@color/white"
+                app:cornerRadius="14dp"
+                app:strokeColor="@color/navy"
+                app:strokeWidth="2dp" />
 
-            <TextView
-                android:id="@+id/tvFooter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btnLogin"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:text="Name and role are needed only when registering"
-                android:textColor="@color/grey_text"
-                android:textSize="12sp" />
         </RelativeLayout>
     </RelativeLayout>
 </ScrollView>

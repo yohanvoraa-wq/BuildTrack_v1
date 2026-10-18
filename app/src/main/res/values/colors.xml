@@ -13,4 +13,21 @@
     <color name="grey_text">#5F6B7A</color>
     <color name="grey_line">#C9CED6</color>
     <color name="header_sub">#C9D3E3</color>
+
+    <color name="purple_dark">#240B4A</color>
+    <color name="purple_mid">#4A2790</color>
+    <color name="purple_light">#D9CCF5</color>
+
+    <color name="buyer_body">#DCE5F4</color>
+
+    <color name="manager_black">#0D0D0D</color>
+    <color name="manager_crimson_dark">#7A0C1B</color>
+    <color name="manager_crimson">#C1121F</color>
+    <color name="manager_crimson_light">#FF6B6B</color>
+    <color name="manager_body">#F3DADD</color>
+
+    <color name="engineer_dark">#0B3D2E</color>
+    <color name="engineer_mid">#1F7A4D</color>
+    <color name="engineer_light">#9FE3B4</color>
+    <color name="engineer_body">#D9EEDF</color>
 </resources>

@@ -7,6 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
+
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +24,13 @@ public class EngineerHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_engineer_home);
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Toast.makeText(EngineerHomeActivity.this, "To Log out, Press the Menu button at the top", Toast.LENGTH_LONG).show();
+            }
+        });
 
         TextView tvWelcome = findViewById(R.id.tvWelcome);
         Button btnMenu = findViewById(R.id.btnMenu);

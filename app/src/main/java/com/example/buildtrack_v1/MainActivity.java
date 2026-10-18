@@ -1,6 +1,7 @@
 package com.example.buildtrack_v1;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -11,28 +12,29 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import android.widget.Toast;
+import androidx.activity.OnBackPressedCallback;
 
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    Button btnRegister, btnLogin;
 
+    Button btnLogin, btnGoRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,17 +42,14 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        EditText etFirstName = findViewById(R.id.etFirstName);
-        EditText etLastName = findViewById(R.id.etLastName);
+
+
         EditText etEmail = findViewById(R.id.etEmail);
         EditText etPassword = findViewById(R.id.etPassword);
         CheckBox cbShowPassword = findViewById(R.id.cbShowPassword);
         RadioGroup rgRole = findViewById(R.id.rgRole);
-
-        btnRegister = findViewById(R.id.btnRegister);
         btnLogin = findViewById(R.id.btnLogin);
-
-
+        btnGoRegister = findViewById(R.id.btnGoRegister);
 
         // Part A: Show password checkbox
         cbShowPassword.setOnClickListener(new View.OnClickListener() {
@@ -61,42 +60,17 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }
-                // changing the method moves the cursor to the start, so move it back to the end
                 etPassword.setSelection(etPassword.getText().length());
             }
         });
 
-        // Part B: Register button = validate, then confirm
-        btnRegister.setOnClickListener(new View.OnClickListener() {
+        // Part B: Login button = validate, sign in, check the chosen role, then route
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String firstName = etFirstName.getText().toString().trim();
-                String lastName = etLastName.getText().toString().trim();
                 String email = etEmail.getText().toString().trim();
                 String password = etPassword.getText().toString();
-                String finalEmail = email.toLowerCase(Locale.ROOT);
-
-                // return after each error: only the first bad field gets the focus,
-                // and nothing moves on with bad data
-                if (firstName.length() == 0) {
-                    etFirstName.requestFocus();
-                    etFirstName.setError("First name cannot be empty");
-                    return;
-                }
-
-                if (!firstName.matches("[a-zA-Z]+([ '-][a-zA-Z]+)*")) {
-                    etFirstName.requestFocus();
-                    etFirstName.setError("Letters only (space, - and ' allowed inside)");
-                    return;
-                }
-
-                // last name is optional, so check it only if something was typed
-                if (lastName.length() > 0 && !lastName.matches("[a-zA-Z]+([ '-][a-zA-Z]+)*")) {
-                    etLastName.requestFocus();
-                    etLastName.setError("Letters only (space, - and ' allowed inside)");
-                    return;
-                }
 
                 if (!email.matches("[a-zA-Z0-9]+([._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}")) {
                     etEmail.requestFocus();
@@ -104,14 +78,12 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                String passwordError = getPasswordError(password);
-                if (passwordError != null) {
+                if (password.length() == 0) {
                     etPassword.requestFocus();
-                    etPassword.setError(passwordError);
+                    etPassword.setError("Password cannot be empty");
                     return;
                 }
 
-                // a RadioGroup has no setError, so a Toast reports a missing role
                 String role = "";
                 int checkedId = rgRole.getCheckedRadioButtonId();
                 if (checkedId == R.id.rbManager) {
@@ -126,87 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Please select your role", Toast.LENGTH_LONG).show();
                     return;
                 }
-
-                // the system stores the name in UPPERCASE: "YohAN vOra" and "yohan VORA" become one name
-                String fullName = firstName.toUpperCase(Locale.ROOT);
-                if (lastName.length() > 0) {
-                    fullName = fullName + " " + lastName.toUpperCase(Locale.ROOT);
-                }
-                String finalName = fullName;
-                String finalRole = role;
-
-                AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
-                ad.setTitle("Confirm Registration");
-                ad.setMessage("Create a " + finalRole + " account for " + finalName + " (" + email + ")?");
-
-                ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        btnRegister.setEnabled(false);
-                        Toast.makeText(MainActivity.this, "Creating account...", Toast.LENGTH_LONG).show();
-
-                        FirebaseAuth auth = FirebaseAuth.getInstance();
-                        auth.createUserWithEmailAndPassword(finalEmail, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    String uid = task.getResult().getUser().getUid();
-                                    UserInfo info = new UserInfo(finalName, finalEmail, finalRole);
-
-                                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-                                    reference.child(uid).setValue(info).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task2) {
-                                            btnRegister.setEnabled(true);
-                                            if (task2.isSuccessful()) {
-                                                Toast.makeText(MainActivity.this, "Account created", Toast.LENGTH_LONG).show();
-                                            } else {
-                                                showError("Could not save profile", task2.getException().getMessage());
-                                            }
-                                        }
-                                    });
-                                } else {
-                                    btnRegister.setEnabled(true);
-                                    showError("Registration failed", task.getException().getMessage());
-                                }
-                            }
-                        });
-                    }
-                });
-
-                ad.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(MainActivity.this, "Registration cancelled", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-                // the dialog stays hidden until show() is called
-                ad.show();
-            }
-        });
-
-        // Part C: Login button = validate, sign in, then route by role
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String email = etEmail.getText().toString().trim();
-                String password = etPassword.getText().toString();
-
-                if (!email.matches("[a-zA-Z0-9]+([._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}")) {
-                    etEmail.requestFocus();
-                    etEmail.setError("Enter a valid email, e.g. name@gmail.com");
-                    return;
-                }
-
-                // strength rules apply only at registration, so login just needs something typed
-                if (password.length() == 0) {
-                    etPassword.requestFocus();
-                    etPassword.setError("Password cannot be empty");
-                    return;
-                }
+                String chosenRole = role;
 
                 setButtonsEnabled(false);
                 Toast.makeText(MainActivity.this, "Logging in...", Toast.LENGTH_LONG).show();
@@ -216,88 +108,57 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    routeUser(task.getResult().getUser().getUid());
+                                    routeUser(task.getResult().getUser().getUid(), chosenRole);
                                 } else {
                                     setButtonsEnabled(true);
-                                    showError("Login failed", task.getException().getMessage());
+                                    showError("Login failed",
+                                            "Check your email and password, or tap Create an account if you haven't registered yet.\n\nDetails: "
+                                                    + task.getException().getMessage());
                                 }
                             }
                         });
             }
         });
 
-        // if someone is already signed in, skip the form and go straight to their home screen
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            setButtonsEnabled(false);
-            routeUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        }
-
-    }
-
-    // Returns null when the password is fine, otherwise a message for the FIRST rule broken
-    private String getPasswordError(String p) {
-
-        if (p.contains(" ")) {
-            return "Password cannot contain spaces";
-        }
-        if (p.contains("_")) {
-            return "Password cannot contain an underscore";
-        }
-        // only letters, digits and these five special characters may appear anywhere
-        if (!p.matches("[a-zA-Z0-9@#$%&]*")) {
-            return "Only these special characters are allowed: @ # $ % &";
-        }
-        if (p.matches("[@#$%&].*")) {
-            return "Password cannot start with a special character";
-        }
-        if (p.length() < 6) {
-            return "Password must be at least 6 characters";
-        }
-        if (!p.matches(".*[A-Z].*")) {
-            return "Add at least 1 uppercase letter";
-        }
-        if (!p.matches(".*[a-z].*")) {
-            return "Add at least 1 lowercase letter";
-        }
-        if (!p.matches(".*[0-9].*")) {
-            return "Add at least 1 number";
-        }
-        if (!p.matches(".*[@#$%&].*")) {
-            return "Add at least 1 special character (@ # $ % &)";
-        }
-        return null;
-    }
-
-    private void showError(String title, String message) {
-        AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
-        ad.setTitle(title);
-        ad.setMessage(message);
-        ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        // Part C: open the Register screen
+        btnGoRegister.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(i);
             }
         });
-        ad.show();
+
+        // already signed in: skip the form and go straight to the home screen (no role to check)
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            setButtonsEnabled(false);
+            routeUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), null);
+        }
     }
 
     private void setButtonsEnabled(boolean enabled) {
-        btnRegister.setEnabled(enabled);
         btnLogin.setEnabled(enabled);
+        btnGoRegister.setEnabled(enabled);
     }
 
-    // reads users/{uid}, then opens the home screen that matches the role
-    private void routeUser(String uid) {
+    // reads users/{uid}, compares the role with the one chosen on screen, then opens the home screen
+    private void routeUser(String uid, String chosenRole) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users").child(uid);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 UserInfo info = snapshot.getValue(UserInfo.class);
                 if (info == null || info.getRole() == null) {
-                    // the account exists in Auth, but its profile is missing from the database
                     FirebaseAuth.getInstance().signOut();
                     setButtonsEnabled(true);
                     showError("Profile not found", "This account has no saved profile. Delete it in Firebase Authentication and register again.");
+                } else if (chosenRole != null && !chosenRole.equals(info.getRole())) {
+                    // the password was right, but the wrong role card was selected
+                    FirebaseAuth.getInstance().signOut();
+                    setButtonsEnabled(true);
+                    showError("Wrong role selected",
+                            "This account is registered as \"" + info.getRole() + "\", not \"" + chosenRole
+                                    + "\". Select the role you registered with.");
                 } else {
                     openHome(info.getRole(), info.getName());
                 }
@@ -312,7 +173,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // opens the right home screen and hands the name over inside the Intent
     private void openHome(String role, String name) {
         Intent i;
         if (role.equals("manager")) {
@@ -329,5 +189,18 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("name", name);
         startActivity(i);
         finish();
+    }
+
+    private void showError(String title, String message) {
+        AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
+        ad.setTitle(title);
+        ad.setMessage(message);
+        ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        ad.show();
     }
 }

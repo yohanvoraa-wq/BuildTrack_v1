@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cream">
+    android:background="@color/manager_body">
 
     <RelativeLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_header"
+        android:background="@drawable/bg_header_manager"
         android:paddingStart="24dp"
         android:paddingTop="56dp"
         android:paddingEnd="24dp"
@@ -19,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Manager"
-            android:textColor="@color/gold"
+            android:textColor="@color/manager_crimson_light"
             android:textSize="28sp"
             android:textStyle="bold" />
 
@@ -38,12 +39,12 @@
             android:layout_width="wrap_content"
             android:layout_height="44dp"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/bg_button_gold"
-            android:backgroundTint="@null"
             android:text="Menu"
             android:textAllCaps="false"
-            android:textColor="@color/navy_dark"
-            android:textStyle="bold" />
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:backgroundTint="@color/manager_crimson"
+            app:cornerRadius="14dp" />
     </RelativeLayout>
 
     <TextView
@@ -55,6 +56,6 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:text="Placeholder screen: the manager dashboard goes here"
-        android:textColor="@color/grey_text"
+        android:textColor="@color/ink"
         android:textSize="14sp" />
 </RelativeLayout>

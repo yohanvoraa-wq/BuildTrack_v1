@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/purple_dark"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/headerBg"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@drawable/bg_header_purple" />
+
+        <TextView
+            android:id="@+id/tvBuild"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="72dp"
+            android:text="Build"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvTrack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/tvBuild"
+            android:layout_toEndOf="@id/tvBuild"
+            android:text="Track"
+            android:textColor="@color/gold"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/accentBar"
+            android:layout_width="48dp"
+            android:layout_height="4dp"
+            android:layout_below="@id/tvBuild"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="6dp"
+            android:background="@color/gold" />
+
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/accentBar"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="8dp"
+            android:text="Construction progress, made transparent"
+            android:textColor="@color/purple_light"
+            android:textSize="14sp" />
+
+        <RelativeLayout
+            android:id="@+id/cardForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/headerBg"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="-60dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/bg_card"
+            android:elevation="8dp"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/tvWelcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create your account"
+                android:textColor="@color/navy"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvWelcome"
+                android:layout_marginTop="4dp"
+                android:text="Fill in your details to register"
+                android:textColor="@color/grey_text"
+                android:textSize="13sp" />
+
+            <EditText
+                android:id="@+id/etFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvHint"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_input"
+                android:hint="First name (required)"
+                android:inputType="textPersonName"
+                android:textColor="@color/ink"
+                android:textColorHint="@color/grey_text"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/etLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etFirstName"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_input"
+                android:hint="Last name (optional)"
+                android:inputType="textPersonName"
+                android:textColor="@color/ink"
+                android:textColorHint="@color/grey_text"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etLastName"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_input"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/ink"
+                android:textColorHint="@color/grey_text"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etEmail"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_input"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColor="@color/ink"
+                android:textColorHint="@color/grey_text"
+                android:textSize="15sp" />
+
+            <CheckBox
+                android:id="@+id/cbShowPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etPassword"
+                android:layout_marginTop="4dp"
+                android:buttonTint="@color/gold"
+                android:text="Show password"
+                android:textColor="@color/grey_text"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvRoleLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cbShowPassword"
+                android:layout_marginTop="16dp"
+                android:text="I am a"
+                android:textColor="@color/navy"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rgRole"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvRoleLabel"
+                android:layout_marginTop="4dp"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/rbManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_role_option"
+                    android:buttonTint="@color/gold"
+                    android:minHeight="52dp"
+                    android:paddingStart="12dp"
+                    android:text="Manager"
+                    android:textColor="@color/ink" />
+
+                <RadioButton
+                    android:id="@+id/rbEngineer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_role_option"
+                    android:buttonTint="@color/gold"
+                    android:minHeight="52dp"
+                    android:paddingStart="12dp"
+                    android:text="On-Site Engineer"
+                    android:textColor="@color/ink" />
+
+                <RadioButton
+                    android:id="@+id/rbBuyer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_role_option"
+                    android:buttonTint="@color/gold"
+                    android:minHeight="52dp"
+                    android:paddingStart="12dp"
+                    android:text="Buyer"
+                    android:textColor="@color/ink" />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btnRegister"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_below="@id/rgRole"
+                android:layout_marginTop="24dp"
+                android:text="Register"
+                android:textAllCaps="false"
+                android:textColor="@color/navy_dark"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/gold"
+                app:cornerRadius="14dp" />
+
+            <Button
+                android:id="@+id/btnGoLogin"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_below="@id/btnRegister"
+                android:layout_marginTop="12dp"
+                android:text="I already have an account"
+                android:textAllCaps="false"
+                android:textColor="@color/navy"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/white"
+                app:cornerRadius="14dp"
+                app:strokeColor="@color/navy"
+                app:strokeWidth="2dp" />
+        </RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
