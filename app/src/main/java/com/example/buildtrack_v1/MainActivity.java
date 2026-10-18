@@ -27,6 +27,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+
 import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 
@@ -134,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
             setButtonsEnabled(false);
             routeUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), null);
         }
+
+
     }
 
     private void setButtonsEnabled(boolean enabled) {
