@@ -28,6 +28,7 @@
         <TextView
             android:id="@+id/tvProjectName"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/tvRole"
             android:layout_marginTop="4dp"
             android:text="Skyline Towers - Phase 1"
@@ -92,6 +93,7 @@
                         android:textSize="26sp"
                         android:textStyle="bold" />
 
+                    <!-- Green line when 100%, crimson otherwise -->
                     <ProgressBar
                         android:id="@+id/pbOverallDetail"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -168,13 +170,28 @@
                     app:cornerRadius="12dp" />
             </GridLayout>
 
+            <!-- SAVE PROGRESS BUTTON - PROMINENTLY VISIBLE AT THE TOP -->
+            <Button
+                android:id="@+id/btnSaveChanges"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="✔ Save Phase Progress"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/manager_crimson"
+                app:cornerRadius="14dp" />
+
             <!-- Phase Sliders -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="12dp"
-                android:text="Construction Phases (Sliders)"
+                android:text="Construction Phases (Adjust with Sliders)"
                 android:textColor="@color/ink"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -183,21 +200,8 @@
                 android:id="@+id/phasesContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
-
-            <Button
-                android:id="@+id/btnSaveChanges"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="24dp"
-                android:text="Save Phase Progress"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:backgroundTint="@color/manager_crimson"
-                app:cornerRadius="14dp" />
+                android:orientation="vertical"
+                android:paddingBottom="24dp" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

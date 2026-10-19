@@ -1,6 +1,8 @@
 package com.example.buildtrack_v1;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -10,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,48 +55,81 @@ public class ProjectDetailActivity extends AppCompatActivity {
         Button btnNavPostUpdate = findViewById(R.id.btnNavPostUpdate);
         Button btnSaveChanges = findViewById(R.id.btnSaveChanges);
 
-        tvProjectName.setText(projectName != null ? projectName : "Project");
+        tvProjectName.setText(projectName != null ? projectName : "Project Detail");
 
         btnBack.setOnClickListener(v -> finish());
 
-        // Navigation to other Manager screens
+        // Quick action navigation
         btnNavLogs.setOnClickListener(v -> {
             Intent intent = new Intent(this, LogsViewActivity.class);
             intent.putExtra("projectId", projectId);
+            intent.putExtra("projectName", projectName);
             startActivity(intent);
         });
 
         btnNavAssign.setOnClickListener(v -> {
             Intent intent = new Intent(this, AssignPeopleActivity.class);
             intent.putExtra("projectId", projectId);
+            intent.putExtra("projectName", projectName);
             startActivity(intent);
         });
 
         btnNavComments.setOnClickListener(v -> {
             Intent intent = new Intent(this, CommentsActivity.class);
             intent.putExtra("projectId", projectId);
+            intent.putExtra("projectName", projectName);
             startActivity(intent);
         });
 
         btnNavPostUpdate.setOnClickListener(v -> {
             Intent intent = new Intent(this, PostUpdateActivity.class);
             intent.putExtra("projectId", projectId);
+            intent.putExtra("projectName", projectName);
             startActivity(intent);
         });
 
-        // Initialize default sample phase values
-        currentPhases.put("Foundation", 100);
-        currentPhases.put("Framing & Structure", 100);
-        currentPhases.put("Masonry", 80);
-        currentPhases.put("Plumbing & Electrical", 60);
-        currentPhases.put("Finishing", 40);
-        currentPhases.put("Handover", 0);
+        // Initialize sample phase values based on project
+        if ("proj_02".equals(projectId)) {
+            // 100% completed sample project
+            currentPhases.put("Foundation", 100);
+            currentPhases.put("Framing & Structure", 100);
+            currentPhases.put("Masonry", 100);
+            currentPhases.put("Plumbing & Electrical", 100);
+            currentPhases.put("Finishing", 100);
+            currentPhases.put("Handover", 100);
+        } else if ("proj_01".equals(projectId)) {
+            currentPhases.put("Foundation", 100);
+            currentPhases.put("Framing & Structure", 100);
+            currentPhases.put("Masonry", 80);
+            currentPhases.put("Plumbing & Electrical", 68);
+            currentPhases.put("Finishing", 60);
+            currentPhases.put("Handover", 0);
+        } else {
+            // Newly created project starts at 0%
+            currentPhases.put("Foundation", 0);
+            currentPhases.put("Framing & Structure", 0);
+            currentPhases.put("Masonry", 0);
+            currentPhases.put("Plumbing & Electrical", 0);
+            currentPhases.put("Finishing", 0);
+            currentPhases.put("Handover", 0);
+        }
 
         populatePhaseSliders();
         calculateOverall();
 
+        // Save Progress Button (now visible right near the top)
         btnSaveChanges.setOnClickListener(v -> {
-            Toast.makeText(this, "Progress saved successfully!", Toast.LENGTH_SHORT).show();
+            int total = 0;
+            for (String phase : PHASE_NAMES) {
+                total += currentPhases.containsKey(phase) ? currentPhases.get(phase) : 0;
+            }
+            int overall = total / PHASE_NAMES.length;
+
+            if (projectId != null) {
+                FirebaseFirestore.getInstance().collection("projects").document(projectId)
+                        .update("overallProgress", overall, "phaseProgress", currentPhases);
+            }
+            Toast.makeText(this, "Progress saved successfully (" + overall + "%)!", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -111,7 +149,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
             TextView title = new TextView(this);
             title.setText(phase + ": " + currentVal + "%");
-            title.setTextColor(getResources().getColor(R.color.ink));
+            title.setTextColor(ContextCompat.getColor(this, R.color.ink));
             title.setTextSize(15);
             title.setTypeface(null, android.graphics.Typeface.BOLD);
 
@@ -143,6 +181,16 @@ public class ProjectDetailActivity extends AppCompatActivity {
         }
         int avg = total / PHASE_NAMES.length;
         pbOverallDetail.setProgress(avg);
-        tvOverallPercent.setText(avg + "%");
+
+        // If 100% completed, show GREEN LINE and GREEN text
+        if (avg == 100) {
+            pbOverallDetail.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#27AE60")));
+            tvOverallPercent.setTextColor(Color.parseColor("#27AE60"));
+            tvOverallPercent.setText("100% Completed");
+        } else {
+            pbOverallDetail.setProgressTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.manager_crimson)));
+            tvOverallPercent.setTextColor(ContextCompat.getColor(this, R.color.manager_crimson));
+            tvOverallPercent.setText(avg + "%");
+        }
     }
 }

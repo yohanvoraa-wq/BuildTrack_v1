@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tvRole"
             android:layout_marginTop="4dp"
-            android:text="Welcome!"
+            android:text="Welcome, Ruddhema"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
@@ -56,12 +56,13 @@
         android:fillViewport="true">
 
         <LinearLayout
+            android:id="@+id/llProjectsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Section Title & "+ New Project" Button Row -->
+            <!-- Section Title & "+ New Project / Assign" Button Row -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,13 +78,13 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <!-- NEW PROJECT OPTION (BUTTON) -->
+                <!-- NEW PROJECT / ASSIGN OPTION -->
                 <Button
                     android:id="@+id/btnNewProject"
                     android:layout_width="wrap_content"
                     android:layout_height="44dp"
                     android:layout_alignParentEnd="true"
-                    android:text="+ New Project"
+                    android:text="+ Assign Project"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textStyle="bold"
@@ -133,11 +134,22 @@
                             android:textStyle="bold" />
                     </RelativeLayout>
 
+                    <!-- Unique Assigned Engineer ID -->
+                    <TextView
+                        android:id="@+id/tvProject1Engineer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="👷 Assigned Engineer ID: ENG-101"
+                        android:textColor="@color/ink"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tvProject1Location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:text="📍 Sector 62, City Center"
                         android:textColor="@color/grey_text"
                         android:textSize="14sp" />
@@ -146,13 +158,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="8dp"
                         android:text="Current Phase: Plumbing &amp; Electrical"
                         android:textColor="@color/ink"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
-                    <!-- Progress Bar -->
+                    <!-- Progress Bar (Crimson for < 100%) -->
                     <ProgressBar
                         android:id="@+id/pbProject1"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -177,7 +189,7 @@
             </androidx.cardview.widget.CardView>
 
 
-            <!-- ================= PROJECT 2 CARD ================= -->
+            <!-- ================= PROJECT 2 CARD (100% Completed with GREEN LINE) ================= -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardProject2"
                 android:layout_width="match_parent"
@@ -206,6 +218,7 @@
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
+                        <!-- Green 100% badge -->
                         <TextView
                             android:id="@+id/tvProject2Badge"
                             android:layout_width="wrap_content"
@@ -214,16 +227,27 @@
                             android:background="@drawable/bg_input"
                             android:paddingHorizontal="10dp"
                             android:paddingVertical="4dp"
-                            android:text="35%"
-                            android:textColor="@color/manager_crimson"
+                            android:text="100% Completed"
+                            android:textColor="#27AE60"
                             android:textStyle="bold" />
                     </RelativeLayout>
+
+                    <!-- Unique Assigned Engineer ID -->
+                    <TextView
+                        android:id="@+id/tvProject2Engineer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="👷 Assigned Engineer ID: ENG-102"
+                        android:textColor="@color/ink"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvProject2Location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:text="📍 Plot 14, Ring Road Extension"
                         android:textColor="@color/grey_text"
                         android:textSize="14sp" />
@@ -232,21 +256,21 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Current Phase: Masonry Work"
-                        android:textColor="@color/ink"
+                        android:layout_marginTop="8dp"
+                        android:text="Current Phase: Handover &amp; Completed"
+                        android:textColor="#27AE60"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
-                    <!-- Progress Bar -->
+                    <!-- 100% Progress Bar with GREEN LINE (#27AE60) -->
                     <ProgressBar
                         android:id="@+id/pbProject2"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="8dp"
                         android:layout_marginTop="8dp"
-                        android:progress="35"
-                        android:progressTint="@color/manager_crimson" />
+                        android:progress="100"
+                        android:progressTint="#27AE60" />
 
                     <Button
                         android:id="@+id/btnManageProject2"
@@ -285,7 +309,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="➕ Add Another Project"
+                        android:text="➕ Assign Another Project"
                         android:textColor="@color/manager_crimson"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -294,7 +318,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Create a new site to assign team &amp; track progress"
+                        android:text="Assign project to an on-site engineer ID &amp; link buyer"
                         android:textColor="@color/grey_text"
                         android:textSize="12sp" />
                 </LinearLayout>
