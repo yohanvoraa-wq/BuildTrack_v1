@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Login and register: warm construction palette -->
+    <color name="entry_nav">#2A1A0E</color>
+    <color name="entry_bg">#FEF3E2</color>
+    <color name="entry_card">#FFFFFF</color>
+    <color name="entry_orange">#D4621A</color>
+    <color name="entry_orange_dark">#B84F12</color>
+    <color name="entry_amber">#F4AE52</color>
+    <color name="entry_text">#2A1A0E</color>
+    <color name="entry_text_dim">#6B625A</color>
+    <color name="entry_line">#E8DCCB</color>
+    <color name="entry_error">#B42318</color>
+    <color name="entry_on_accent">#FFFFFF</color>
+    <color name="entry_nav_light">#3D2614</color>
+    <color name="entry_ivory_deep">#FAE3BD</color>
+    <color name="entry_chip_on">#FFF0DA</color>
+
+    <!-- On-site engineer: deep olive, cream, sand and mustard -->
+    <color name="engineer_bg">#1D220F</color>
+    <color name="engineer_surface">#272E15</color>
+    <color name="engineer_surface_2">#343E1C</color>
+    <color name="engineer_line">#4F5B2A</color>
+    <color name="engineer_text">#F5EFE3</color>
+    <color name="engineer_text_dim">#D8C9A8</color>
+    <color name="engineer_accent">#B8892D</color>
+    <color name="engineer_on_accent">#1D220F</color>
+
+    <!-- Manager: deep teal, burgundy, sage and pale yellow -->
+    <color name="manager_bg">#0D2624</color>
+    <color name="manager_surface">#17433F</color>
+    <color name="manager_surface_2">#4B1426</color>
+    <color name="manager_line">#558467</color>
+    <color name="manager_text">#EFEABB</color>
+    <color name="manager_text_dim">#B9D2C2</color>
+    <color name="manager_accent">#EFEABB</color>
+    <color name="manager_on_accent">#0D2624</color>
+
+    <!-- Site-team screens (engineer, manager): neutral graphite, one blue accent -->
+    <color name="slate_bg">#0E1013</color>
+    <color name="slate_surface">#171A1F</color>
+    <color name="slate_surface_2">#1F2329</color>
+    <color name="slate_line">#2B3036</color>
+    <color name="slate_text">#E9ECEF</color>
+    <color name="slate_text_dim">#9BA3AC</color>
+    <color name="accent_site">#4C8DF6</color>
+    <color name="on_accent">#0B0E11</color>
+    <!-- Buyer portal: cream, beige, maroon, dusty blue, dark brown -->
+    <color name="buyer_bg">#F5EFE1</color>
+    <color name="buyer_surface">#FFFFFF</color>
+    <color name="buyer_surface_alt">#E5D3AF</color>
+    <color name="buyer_ink">#352C28</color>
+    <color name="buyer_muted">#6F625B</color>
+    <color name="buyer_line">#E5D3AF</color>
+    <color name="buyer_accent">#790D16</color>
+    <!-- kept as a name for the muted secondary line; the gold was fighting the navy -->
+    <color name="buyer_on_accent">#FFFFFF</color>
+    <color name="buyer_gold">#AEC4D4</color>
+
+    <color name="danger">#C0392B</color>
+    <!-- Site status chips: green on track, amber waiting, red behind or overdue -->
+    <color name="status_ok">#1F7A4D</color>
+    <color name="status_wait">#B7791F</color>
+    <color name="status_late">#C1121F</color>
+</resources>

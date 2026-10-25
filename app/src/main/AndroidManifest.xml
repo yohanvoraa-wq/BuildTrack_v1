@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- The site camera is launched through ACTION_IMAGE_CAPTURE, so the camera apps must be
+         visible to this package on Android 11+. -->
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.BuildTrack_v1">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Launcher / Login -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Auth -->
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Manager Flow -->
+        <activity
+            android:name=".ManagerHomeActivity"
+            android:theme="@style/Theme.BuildTrack_v1.Manager"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ProjectDetailActivity"
+            android:theme="@style/Theme.BuildTrack_v1.Manager"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".AssignPeopleActivity"
+            android:theme="@style/Theme.BuildTrack_v1.Manager"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".CommentsActivity"
+            android:theme="@style/Theme.BuildTrack_v1.Manager"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".PostUpdateActivity"
+            android:theme="@style/Theme.BuildTrack_v1.Manager"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Shared: stage bars that drive the overall progress number -->
+        <activity
+            android:name=".PhaseProgressActivity"
+            android:exported="false" />
+
+        <!-- Engineer Flow -->
+        <activity
+            android:name=".EngineerHomeActivity"
+            android:theme="@style/Theme.BuildTrack_v1.Engineer"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".DailyLogEntryActivity"
+            android:theme="@style/Theme.BuildTrack_v1.Engineer"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".LogHistoryActivity"
+            android:theme="@style/Theme.BuildTrack_v1.Engineer"
+            android:exported="false" />
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Buyer Flow -->
+        <activity
+            android:name=".BuyerHomeActivity"
+            android:theme="@style/Theme.BuildTrack_v1.Buyer"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ProgressActivity"
+            android:theme="@style/Theme.BuildTrack_v1.Buyer"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".UpdatesFeedActivity"
+            android:theme="@style/Theme.BuildTrack_v1.Buyer"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <!-- Shared by buyer and manager; the theme is chosen in code from the "role" extra -->
+        <activity
+            android:name=".DocumentsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PhotoViewerActivity"
+            android:theme="@style/Theme.BuildTrack_v1.Engineer"
+            android:exported="false" />
+        <activity
+            android:name=".ManagerLogsActivity"
+            android:theme="@style/Theme.BuildTrack_v1.Manager"
+            android:exported="false" />
+
+    </application>
+
+</manifest>

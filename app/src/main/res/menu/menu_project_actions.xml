@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_progress"
+        android:title="@string/progress" />
+    <item
+        android:id="@+id/action_chat"
+        android:title="@string/chat" />
+    <item
+        android:id="@+id/action_engineers"
+        android:title="@string/engineers" />
+    <item
+        android:id="@+id/action_buyers"
+        android:title="@string/buyers" />
+</menu>

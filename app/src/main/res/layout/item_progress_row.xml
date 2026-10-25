@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="14dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvRowWhen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="12 Oct 2026"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/tvRowPct"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_marginEnd="10dp"/>
+
+        <TextView
+            android:id="@+id/tvRowPct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="42%" />
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/pbRow"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_marginTop="6dp"
+        android:max="100"
+        android:progressTint="?attr/colorPrimary"
+        tools:progress="42"
+        android:progressBackgroundTint="?attr/colorOutlineVariant" />
+</LinearLayout>

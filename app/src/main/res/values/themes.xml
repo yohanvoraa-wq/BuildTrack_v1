@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Three surfaces, one language:
+        * site-team screens (engineer, manager, sign-in) are dark slate and differ only in accent
+        * the buyer portal stays a light, calm owner-facing theme
+      Layouts reference theme attributes (?attr/colorSurface and friends) instead of raw colours,
+      so a screen picks up its role's identity from the activity's theme.
+    -->
+
+    <style name="Base.Theme.BuildTrack_v1" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:colorBackground">@color/slate_bg</item>
+        <item name="colorSurface">@color/slate_surface</item>
+        <item name="colorSurfaceContainerLow">@color/slate_surface</item>
+        <item name="colorSurfaceContainer">@color/slate_surface_2</item>
+        <item name="colorSurfaceContainerHigh">@color/slate_surface_2</item>
+        <item name="colorSurfaceContainerHighest">@color/slate_line</item>
+        <item name="colorOnBackground">@color/slate_text</item>
+        <item name="colorOnSurface">@color/slate_text</item>
+        <item name="colorOnSurfaceVariant">@color/slate_text_dim</item>
+        <item name="colorOutline">@color/slate_line</item>
+        <item name="colorOutlineVariant">@color/slate_line</item>
+        <item name="colorPrimary">@color/accent_site</item>
+        <item name="colorOnPrimary">@color/on_accent</item>
+        <item name="colorPrimaryContainer">@color/slate_surface_2</item>
+        <item name="colorOnPrimaryContainer">@color/slate_text</item>
+        <!-- Material's baseline dark scheme is lavender here; keep every control on the slate palette -->
+        <item name="colorSecondary">@color/accent_site</item>
+        <item name="colorOnSecondary">@color/on_accent</item>
+        <item name="colorSecondaryContainer">@color/slate_surface_2</item>
+        <item name="colorOnSecondaryContainer">@color/slate_text</item>
+        <item name="colorTertiary">@color/accent_site</item>
+        <item name="colorOnTertiary">@color/slate_text</item>
+        <item name="colorTertiaryContainer">@color/slate_surface_2</item>
+        <item name="colorOnTertiaryContainer">@color/slate_text</item>
+        <item name="colorError">@color/danger</item>
+        <item name="android:colorControlActivated">?attr/colorPrimary</item>
+        <item name="android:colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.BuildTrack</item>
+    </style>
+
+    <!-- Overlays (overflow menus, home menu) need a solid panel; the AppCompat default is a
+         translucent black that disappears against the slate background. -->
+    <style name="PopupMenu.BuildTrack" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_popup</item>
+        <item name="android:popupElevation">8dp</item>
+    </style>
+
+    <!-- Login and register only: the app theme, light and warm. Site roles keep the dark base theme above. -->
+    <style name="Theme.BuildTrack_v1" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:colorBackground">@color/entry_bg</item>
+        <item name="colorSurface">@color/entry_bg</item>
+        <item name="colorSurfaceContainerLow">@color/entry_card</item>
+        <item name="colorSurfaceContainer">@color/entry_card</item>
+        <item name="colorSurfaceContainerHigh">@color/entry_card</item>
+        <item name="colorSurfaceContainerHighest">@color/entry_line</item>
+        <item name="colorOnBackground">@color/entry_text</item>
+        <item name="colorOnSurface">@color/entry_text</item>
+        <item name="colorOnSurfaceVariant">@color/entry_text_dim</item>
+        <item name="colorOutline">@color/entry_line</item>
+        <item name="colorOutlineVariant">@color/entry_line</item>
+        <item name="colorPrimary">@color/entry_orange</item>
+        <item name="colorOnPrimary">@color/entry_on_accent</item>
+        <item name="colorPrimaryContainer">@color/entry_amber</item>
+        <item name="colorOnPrimaryContainer">@color/entry_text</item>
+        <item name="colorSecondary">@color/entry_amber</item>
+        <item name="colorOnSecondary">@color/entry_text</item>
+        <item name="colorTertiary">@color/entry_amber</item>
+        <item name="colorOnTertiary">@color/entry_text</item>
+        <item name="colorError">@color/entry_error</item>
+        <item name="android:colorControlActivated">?attr/colorPrimary</item>
+        <item name="android:colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.BuildTrack</item>
+    </style>
+
+    <!-- On-site engineer: deep olive, cream, sand and mustard -->
+    <style name="Theme.BuildTrack_v1.Engineer" parent="Base.Theme.BuildTrack_v1">
+        <item name="android:colorBackground">@color/engineer_bg</item>
+        <item name="colorSurface">@color/engineer_surface</item>
+        <item name="colorSurfaceContainerLow">@color/engineer_surface</item>
+        <item name="colorSurfaceContainer">@color/engineer_surface_2</item>
+        <item name="colorSurfaceContainerHigh">@color/engineer_surface_2</item>
+        <item name="colorSurfaceContainerHighest">@color/engineer_line</item>
+        <item name="colorOnBackground">@color/engineer_text</item>
+        <item name="colorOnSurface">@color/engineer_text</item>
+        <item name="colorOnSurfaceVariant">@color/engineer_text_dim</item>
+        <item name="colorOutline">@color/engineer_line</item>
+        <item name="colorOutlineVariant">@color/engineer_line</item>
+        <item name="colorPrimary">@color/engineer_accent</item>
+        <item name="colorOnPrimary">@color/engineer_on_accent</item>
+        <item name="colorPrimaryContainer">@color/engineer_surface_2</item>
+        <item name="colorOnPrimaryContainer">@color/engineer_text</item>
+        <item name="colorSecondary">@color/engineer_accent</item>
+        <item name="colorOnSecondary">@color/engineer_on_accent</item>
+        <item name="colorSecondaryContainer">@color/engineer_surface_2</item>
+        <item name="colorOnSecondaryContainer">@color/engineer_text</item>
+        <item name="colorTertiary">@color/engineer_accent</item>
+        <item name="colorOnTertiary">@color/engineer_on_accent</item>
+        <item name="colorTertiaryContainer">@color/engineer_surface_2</item>
+        <item name="colorOnTertiaryContainer">@color/engineer_text</item>
+    </style>
+
+    <!-- Manager: deep teal, burgundy, sage and pale yellow -->
+    <style name="Theme.BuildTrack_v1.Manager" parent="Base.Theme.BuildTrack_v1">
+        <item name="android:colorBackground">@color/manager_bg</item>
+        <item name="colorSurface">@color/manager_surface</item>
+        <item name="colorSurfaceContainerLow">@color/manager_surface</item>
+        <item name="colorSurfaceContainer">@color/manager_surface_2</item>
+        <item name="colorSurfaceContainerHigh">@color/manager_surface_2</item>
+        <item name="colorSurfaceContainerHighest">@color/manager_line</item>
+        <item name="colorOnBackground">@color/manager_text</item>
+        <item name="colorOnSurface">@color/manager_text</item>
+        <item name="colorOnSurfaceVariant">@color/manager_text_dim</item>
+        <item name="colorOutline">@color/manager_line</item>
+        <item name="colorOutlineVariant">@color/manager_line</item>
+        <item name="colorPrimary">@color/manager_accent</item>
+        <item name="colorOnPrimary">@color/manager_on_accent</item>
+        <item name="colorPrimaryContainer">@color/manager_surface_2</item>
+        <item name="colorOnPrimaryContainer">@color/manager_text</item>
+        <item name="colorSecondary">@color/manager_accent</item>
+        <item name="colorOnSecondary">@color/manager_on_accent</item>
+        <item name="colorSecondaryContainer">@color/manager_surface_2</item>
+        <item name="colorOnSecondaryContainer">@color/manager_text</item>
+        <item name="colorTertiary">@color/manager_accent</item>
+        <item name="colorOnTertiary">@color/manager_on_accent</item>
+        <item name="colorTertiaryContainer">@color/manager_surface_2</item>
+        <item name="colorOnTertiaryContainer">@color/manager_text</item>
+    </style>
+
+    <!-- Buyer portal: warm cream and beige, maroon actions, dusty-blue highlights, dark-brown text -->
+    <style name="Theme.BuildTrack_v1.Buyer" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:colorBackground">@color/buyer_bg</item>
+        <item name="colorSurface">@color/buyer_surface</item>
+        <item name="colorSurfaceContainerLow">@color/buyer_surface</item>
+        <item name="colorSurfaceContainer">@color/buyer_surface_alt</item>
+        <item name="colorSurfaceContainerHigh">@color/buyer_surface_alt</item>
+        <item name="colorSurfaceContainerHighest">@color/buyer_line</item>
+        <item name="colorOnBackground">@color/buyer_ink</item>
+        <item name="colorOnSurface">@color/buyer_ink</item>
+        <item name="colorOnSurfaceVariant">@color/buyer_muted</item>
+        <item name="colorOutline">@color/buyer_line</item>
+        <item name="colorOutlineVariant">@color/buyer_line</item>
+        <item name="colorPrimary">@color/buyer_accent</item>
+        <item name="colorOnPrimary">@color/buyer_on_accent</item>
+        <item name="colorPrimaryContainer">@color/buyer_surface_alt</item>
+        <item name="colorOnPrimaryContainer">@color/buyer_ink</item>
+        <item name="colorSecondary">@color/buyer_gold</item>
+        <item name="colorOnSecondary">@color/buyer_ink</item>
+        <item name="colorTertiary">@color/buyer_gold</item>
+        <item name="colorOnTertiary">@color/buyer_ink</item>
+        <item name="colorError">@color/danger</item>
+        <item name="android:colorControlActivated">?attr/colorPrimary</item>
+        <item name="android:colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.BuildTrack</item>
+    </style>
+</resources>

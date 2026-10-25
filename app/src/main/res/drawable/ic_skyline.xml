@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Abstract construction skyline with a crane, drawn in a lighter espresso -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="110dp"
+    android:viewportWidth="320"
+    android:viewportHeight="110">
+    <path android:fillColor="#4A3019" android:pathData="M10,70h40v40h-40z" />
+    <path android:fillColor="#563721" android:pathData="M56,40h34v70h-34z" />
+    <path android:fillColor="#4A3019" android:pathData="M96,58h44v52h-44z" />
+    <path android:fillColor="#5E3D24" android:pathData="M146,22h38v88h-38z" />
+    <path android:fillColor="#4A3019" android:pathData="M190,62h36v48h-36z" />
+    <path android:fillColor="#563721" android:pathData="M232,46h40v64h-40z" />
+    <path android:fillColor="#4A3019" android:pathData="M278,76h34v34h-34z" />
+    <!-- crane -->
+    <path
+        android:pathData="M165,22L165,4M120,6L205,6M132,6L132,24M165,4L205,6M165,4L120,6"
+        android:strokeColor="#F4AE52"
+        android:strokeWidth="1.6"
+        android:strokeAlpha="0.85" />
+    <!-- lit windows -->
+    <path android:fillColor="#F4AE52" android:fillAlpha="0.7"
+        android:pathData="M64,52h4v4h-4zM76,52h4v4h-4zM64,68h4v4h-4zM76,84h4v4h-4zM154,36h4v4h-4zM168,52h4v4h-4zM154,68h4v4h-4zM168,84h4v4h-4zM104,70h4v4h-4zM120,86h4v4h-4zM240,60h4v4h-4zM256,78h4v4h-4zM198,76h4v4h-4zM18,84h4v4h-4zM286,90h4v4h-4z" />
+</vector>

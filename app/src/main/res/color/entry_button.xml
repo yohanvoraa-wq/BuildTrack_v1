@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Primary button fill: Construction Orange, Burnt Orange while pressed (Android's version of hover) -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" android:color="@color/entry_orange_dark" />
+    <item android:color="@color/entry_orange" />
+</selector>

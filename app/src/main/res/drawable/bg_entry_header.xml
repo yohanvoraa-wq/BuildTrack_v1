@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Espresso header: soft gradient, rounded bottom, thin amber line along the edge -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/entry_amber" />
+            <corners
+                android:bottomLeftRadius="36dp"
+                android:bottomRightRadius="36dp" />
+        </shape>
+    </item>
+    <item android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="@color/entry_nav_light"
+                android:endColor="@color/entry_nav" />
+            <corners
+                android:bottomLeftRadius="36dp"
+                android:bottomRightRadius="36dp" />
+        </shape>
+    </item>
+</layer-list>
