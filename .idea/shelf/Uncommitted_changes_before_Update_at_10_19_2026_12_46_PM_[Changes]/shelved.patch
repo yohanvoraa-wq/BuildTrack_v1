@@ -1,0 +1,1659 @@
+Index: app/src/main/java/com/example/buildtrack_v1/ManagerHomeActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.buildtrack_v1;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.PopupMenu;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.activity.OnBackPressedCallback;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.google.firebase.auth.FirebaseAuth;\r\n\r\n// PLACEHOLDER: Ruddhima replaces this screen with the manager dashboard\r\npublic class ManagerHomeActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_manager_home);\r\n\r\n        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {\r\n            @Override\r\n            public void handleOnBackPressed() {\r\n                Toast.makeText(ManagerHomeActivity.this, \"To Log out, Press the Menu button at the top\", Toast.LENGTH_LONG).show();\r\n            }\r\n        });\r\n\r\n        TextView tvWelcome = findViewById(R.id.tvWelcome);\r\n        Button btnMenu = findViewById(R.id.btnMenu);\r\n\r\n        // the name travels here inside the Intent that MainActivity started this screen with\r\n        String name = getIntent().getStringExtra(\"name\");\r\n        tvWelcome.setText(\"Welcome, \" + name);\r\n\r\n        btnMenu.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                PopupMenu menu = new PopupMenu(ManagerHomeActivity.this, btnMenu);\r\n                menu.getMenuInflater().inflate(R.menu.menu_home, menu.getMenu());\r\n\r\n                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {\r\n                    @Override\r\n                    public boolean onMenuItemClick(MenuItem item) {\r\n                        if (item.getItemId() == R.id.menuLogout) {\r\n                            FirebaseAuth.getInstance().signOut();\r\n                            Intent i = new Intent(ManagerHomeActivity.this, MainActivity.class);\r\n                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);\r\n                            startActivity(i);\r\n                        }\r\n                        return true;\r\n                    }\r\n                });\r\n\r\n                menu.show();\r\n            }\r\n        });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/buildtrack_v1/ManagerHomeActivity.java b/app/src/main/java/com/example/buildtrack_v1/ManagerHomeActivity.java
+--- a/app/src/main/java/com/example/buildtrack_v1/ManagerHomeActivity.java	(revision 7d53f303a5829dcba103e2215b088d2941495a7f)
++++ b/app/src/main/java/com/example/buildtrack_v1/ManagerHomeActivity.java	(date 1792392283077)
+@@ -5,16 +5,19 @@
+ import android.view.MenuItem;
+ import android.view.View;
+ import android.widget.Button;
++import android.widget.EditText;
++import android.widget.LinearLayout;
+ import android.widget.PopupMenu;
+ import android.widget.TextView;
+ import android.widget.Toast;
+ 
+ import androidx.activity.OnBackPressedCallback;
++import androidx.appcompat.app.AlertDialog;
+ import androidx.appcompat.app.AppCompatActivity;
++import androidx.cardview.widget.CardView;
+ 
+ import com.google.firebase.auth.FirebaseAuth;
+ 
+-// PLACEHOLDER: Ruddhima replaces this screen with the manager dashboard
+ public class ManagerHomeActivity extends AppCompatActivity {
+ 
+     @Override
+@@ -22,41 +25,92 @@
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_manager_home);
+ 
++        // Back press behavior
+         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+             @Override
+             public void handleOnBackPressed() {
+-                Toast.makeText(ManagerHomeActivity.this, "To Log out, Press the Menu button at the top", Toast.LENGTH_LONG).show();
++                Toast.makeText(ManagerHomeActivity.this, "To Log out, Press the Menu button at the top", Toast.LENGTH_SHORT).show();
+             }
+         });
+ 
++        // Top bar views
+         TextView tvWelcome = findViewById(R.id.tvWelcome);
+         Button btnMenu = findViewById(R.id.btnMenu);
+ 
+-        // the name travels here inside the Intent that MainActivity started this screen with
+         String name = getIntent().getStringExtra("name");
+-        tvWelcome.setText("Welcome, " + name);
++        tvWelcome.setText(name != null ? "Welcome, " + name : "Welcome, Ruddhema");
+ 
+-        btnMenu.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                PopupMenu menu = new PopupMenu(ManagerHomeActivity.this, btnMenu);
+-                menu.getMenuInflater().inflate(R.menu.menu_home, menu.getMenu());
+-
+-                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+-                    @Override
+-                    public boolean onMenuItemClick(MenuItem item) {
+-                        if (item.getItemId() == R.id.menuLogout) {
+-                            FirebaseAuth.getInstance().signOut();
+-                            Intent i = new Intent(ManagerHomeActivity.this, MainActivity.class);
+-                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+-                            startActivity(i);
+-                        }
+-                        return true;
+-                    }
+-                });
+-
+-                menu.show();
++        // Menu Logout logic
++        btnMenu.setOnClickListener(v -> {
++            PopupMenu menu = new PopupMenu(ManagerHomeActivity.this, v);
++            menu.getMenuInflater().inflate(R.menu.menu_home, menu.getMenu());
++            menu.setOnMenuItemClickListener(item -> {
++                if (item.getItemId() == R.id.menuLogout) {
++                    FirebaseAuth.getInstance().signOut();
++                    Intent i = new Intent(ManagerHomeActivity.this, MainActivity.class);
++                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
++                    startActivity(i);
++                }
++                return true;
++            });
++            menu.show();
++        });
++
++        // New Project Buttons
++        Button btnNewProject = findViewById(R.id.btnNewProject);
++        CardView cardAddNewProject = findViewById(R.id.cardAddNewProject);
++
++        View.OnClickListener createProjectListener = v -> showCreateProjectDialog();
++        btnNewProject.setOnClickListener(createProjectListener);
++        cardAddNewProject.setOnClickListener(createProjectListener);
++
++        // Manage Project 1
++        Button btnManageProject1 = findViewById(R.id.btnManageProject1);
++        btnManageProject1.setOnClickListener(v -> {
++            Intent intent = new Intent(ManagerHomeActivity.this, ProjectDetailActivity.class);
++            intent.putExtra("projectId", "proj_01");
++            intent.putExtra("projectName", "Skyline Towers - Phase 1");
++            startActivity(intent);
++        });
++
++        // Manage Project 2
++        Button btnManageProject2 = findViewById(R.id.btnManageProject2);
++        btnManageProject2.setOnClickListener(v -> {
++            Intent intent = new Intent(ManagerHomeActivity.this, ProjectDetailActivity.class);
++            intent.putExtra("projectId", "proj_02");
++            intent.putExtra("projectName", "Greenfield Residency");
++            startActivity(intent);
++        });
++    }
++
++    private void showCreateProjectDialog() {
++        AlertDialog.Builder builder = new AlertDialog.Builder(this);
++        builder.setTitle("Add New Project");
++
++        LinearLayout layout = new LinearLayout(this);
++        layout.setOrientation(LinearLayout.VERTICAL);
++        layout.setPadding(50, 40, 50, 10);
++
++        final EditText etName = new EditText(this);
++        etName.setHint("Project Name (e.g. Amber Woods)");
++        layout.addView(etName);
++
++        final EditText etLoc = new EditText(this);
++        etLoc.setHint("Location (e.g. Block B, Metro Road)");
++        layout.addView(etLoc);
++
++        builder.setView(layout);
++
++        builder.setPositiveButton("Create", (dialog, which) -> {
++            String pName = etName.getText().toString().trim();
++            if (pName.isEmpty()) {
++                Toast.makeText(this, "Project name cannot be empty", Toast.LENGTH_SHORT).show();
++                return;
+             }
++            Toast.makeText(this, "Project '" + pName + "' created!", Toast.LENGTH_SHORT).show();
+         });
++
++        builder.setNegativeButton("Cancel", null);
++        builder.show();
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\">\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n        android:fullBackupContent=\"@xml/backup_rules\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.BuildTrack_v1\">\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:exported=\"true\"\r\n            android:windowSoftInputMode=\"adjustResize\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity\r\n            android:name=\".ManagerHomeActivity\"\r\n            android:exported=\"false\"\r\n            android:windowSoftInputMode=\"adjustResize\" />\r\n        <activity\r\n            android:name=\".EngineerHomeActivity\"\r\n            android:exported=\"false\"\r\n            android:windowSoftInputMode=\"adjustResize\" />\r\n        <activity\r\n            android:name=\".BuyerHomeActivity\"\r\n            android:exported=\"false\"\r\n            android:windowSoftInputMode=\"adjustResize\" />\r\n        <activity\r\n            android:name=\".RegisterActivity\"\r\n            android:exported=\"false\"\r\n            android:windowSoftInputMode=\"adjustResize\" />\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision 7d53f303a5829dcba103e2215b088d2941495a7f)
++++ b/app/src/main/AndroidManifest.xml	(date 1792393200811)
+@@ -12,6 +12,26 @@
+         android:supportsRtl="true"
+         android:theme="@style/Theme.BuildTrack_v1">
+         <activity
++            android:name=".ProjectDetailActivity"
++            android:exported="false"
++            android:windowSoftInputMode="adjustResize" />
++        <activity
++            android:name=".LogsViewActivity"
++            android:exported="false"
++            android:windowSoftInputMode="adjustResize" />
++        <activity
++            android:name=".AssignPeopleActivity"
++            android:exported="false"
++            android:windowSoftInputMode="adjustResize" />
++        <activity
++            android:name=".CommentsActivity"
++            android:exported="false"
++            android:windowSoftInputMode="adjustResize" />
++        <activity
++            android:name=".PostUpdateActivity"
++            android:exported="false"
++            android:windowSoftInputMode="adjustResize" />
++        <activity
+             android:name=".MainActivity"
+             android:exported="true"
+             android:windowSoftInputMode="adjustResize">
+Index: app/src/main/res/layout/activity_manager_home.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@color/manager_body\">\r\n\r\n    <RelativeLayout\r\n        android:id=\"@+id/topBar\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:background=\"@drawable/bg_header_manager\"\r\n        android:paddingStart=\"24dp\"\r\n        android:paddingTop=\"56dp\"\r\n        android:paddingEnd=\"24dp\"\r\n        android:paddingBottom=\"32dp\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvRole\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Manager\"\r\n            android:textColor=\"@color/manager_crimson_light\"\r\n            android:textSize=\"28sp\"\r\n            android:textStyle=\"bold\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvWelcome\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_below=\"@id/tvRole\"\r\n            android:layout_marginTop=\"4dp\"\r\n            android:text=\"Welcome\"\r\n            android:textColor=\"@color/white\"\r\n            android:textSize=\"16sp\" />\r\n\r\n        <Button\r\n            android:id=\"@+id/btnMenu\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"44dp\"\r\n            android:layout_alignParentEnd=\"true\"\r\n            android:text=\"Menu\"\r\n            android:textAllCaps=\"false\"\r\n            android:textColor=\"@color/white\"\r\n            android:textStyle=\"bold\"\r\n            app:backgroundTint=\"@color/manager_crimson\"\r\n            app:cornerRadius=\"14dp\" />\r\n    </RelativeLayout>\r\n\r\n    <TextView\r\n        android:id=\"@+id/tvPlaceholder\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_below=\"@id/topBar\"\r\n        android:layout_marginStart=\"24dp\"\r\n        android:layout_marginTop=\"24dp\"\r\n        android:layout_marginEnd=\"24dp\"\r\n        android:text=\"Placeholder screen: the manager dashboard goes here\"\r\n        android:textColor=\"@color/ink\"\r\n        android:textSize=\"14sp\" />\r\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_manager_home.xml b/app/src/main/res/layout/activity_manager_home.xml
+--- a/app/src/main/res/layout/activity_manager_home.xml	(revision 7d53f303a5829dcba103e2215b088d2941495a7f)
++++ b/app/src/main/res/layout/activity_manager_home.xml	(date 1792392243462)
+@@ -5,6 +5,7 @@
+     android:layout_height="match_parent"
+     android:background="@color/manager_body">
+ 
++    <!-- Top Header Bar -->
+     <RelativeLayout
+         android:id="@+id/topBar"
+         android:layout_width="match_parent"
+@@ -30,7 +31,7 @@
+             android:layout_height="wrap_content"
+             android:layout_below="@id/tvRole"
+             android:layout_marginTop="4dp"
+-            android:text="Welcome"
++            android:text="Welcome!"
+             android:textColor="@color/white"
+             android:textSize="16sp" />
+ 
+@@ -47,15 +48,258 @@
+             app:cornerRadius="14dp" />
+     </RelativeLayout>
+ 
+-    <TextView
+-        android:id="@+id/tvPlaceholder"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_below="@id/topBar"
+-        android:layout_marginStart="24dp"
+-        android:layout_marginTop="24dp"
+-        android:layout_marginEnd="24dp"
+-        android:text="Placeholder screen: the manager dashboard goes here"
+-        android:textColor="@color/ink"
+-        android:textSize="14sp" />
++    <!-- Scrollable Content -->
++    <ScrollView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:layout_below="@id/topBar"
++        android:fillViewport="true">
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="vertical"
++            android:padding="20dp">
++
++            <!-- Section Title & "+ New Project" Button Row -->
++            <RelativeLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="16dp">
++
++                <TextView
++                    android:id="@+id/tvSectionTitle"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:layout_centerVertical="true"
++                    android:text="Ongoing Projects (2)"
++                    android:textColor="@color/ink"
++                    android:textSize="18sp"
++                    android:textStyle="bold" />
++
++                <!-- NEW PROJECT OPTION (BUTTON) -->
++                <Button
++                    android:id="@+id/btnNewProject"
++                    android:layout_width="wrap_content"
++                    android:layout_height="44dp"
++                    android:layout_alignParentEnd="true"
++                    android:text="+ New Project"
++                    android:textAllCaps="false"
++                    android:textColor="@color/white"
++                    android:textStyle="bold"
++                    app:backgroundTint="@color/manager_crimson"
++                    app:cornerRadius="12dp" />
++            </RelativeLayout>
++
++            <!-- ================= PROJECT 1 CARD ================= -->
++            <androidx.cardview.widget.CardView
++                android:id="@+id/cardProject1"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="16dp"
++                app:cardBackgroundColor="@color/white"
++                app:cardCornerRadius="16dp"
++                app:cardElevation="3dp">
++
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:orientation="vertical"
++                    android:padding="18dp">
++
++                    <RelativeLayout
++                        android:layout_width="match_parent"
++                        android:layout_height="wrap_content">
++
++                        <TextView
++                            android:id="@+id/tvProject1Name"
++                            android:layout_width="wrap_content"
++                            android:layout_height="wrap_content"
++                            android:text="Skyline Towers - Phase 1"
++                            android:textColor="@color/ink"
++                            android:textSize="18sp"
++                            android:textStyle="bold" />
++
++                        <TextView
++                            android:id="@+id/tvProject1Badge"
++                            android:layout_width="wrap_content"
++                            android:layout_height="wrap_content"
++                            android:layout_alignParentEnd="true"
++                            android:background="@drawable/bg_input"
++                            android:paddingHorizontal="10dp"
++                            android:paddingVertical="4dp"
++                            android:text="68%"
++                            android:textColor="@color/manager_crimson"
++                            android:textStyle="bold" />
++                    </RelativeLayout>
++
++                    <TextView
++                        android:id="@+id/tvProject1Location"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_marginTop="4dp"
++                        android:text="📍 Sector 62, City Center"
++                        android:textColor="@color/grey_text"
++                        android:textSize="14sp" />
++
++                    <!-- Phase Status Subtitle -->
++                    <TextView
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_marginTop="10dp"
++                        android:text="Current Phase: Plumbing &amp; Electrical"
++                        android:textColor="@color/ink"
++                        android:textSize="13sp"
++                        android:textStyle="bold" />
++
++                    <!-- Progress Bar -->
++                    <ProgressBar
++                        android:id="@+id/pbProject1"
++                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
++                        android:layout_width="match_parent"
++                        android:layout_height="8dp"
++                        android:layout_marginTop="8dp"
++                        android:progress="68"
++                        android:progressTint="@color/manager_crimson" />
++
++                    <Button
++                        android:id="@+id/btnManageProject1"
++                        android:layout_width="match_parent"
++                        android:layout_height="44dp"
++                        android:layout_marginTop="14dp"
++                        android:text="Manage Project"
++                        android:textAllCaps="false"
++                        android:textColor="@color/white"
++                        android:textStyle="bold"
++                        app:backgroundTint="@color/manager_crimson"
++                        app:cornerRadius="12dp" />
++                </LinearLayout>
++            </androidx.cardview.widget.CardView>
++
++
++            <!-- ================= PROJECT 2 CARD ================= -->
++            <androidx.cardview.widget.CardView
++                android:id="@+id/cardProject2"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="16dp"
++                app:cardBackgroundColor="@color/white"
++                app:cardCornerRadius="16dp"
++                app:cardElevation="3dp">
++
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:orientation="vertical"
++                    android:padding="18dp">
++
++                    <RelativeLayout
++                        android:layout_width="match_parent"
++                        android:layout_height="wrap_content">
++
++                        <TextView
++                            android:id="@+id/tvProject2Name"
++                            android:layout_width="wrap_content"
++                            android:layout_height="wrap_content"
++                            android:text="Greenfield Residency"
++                            android:textColor="@color/ink"
++                            android:textSize="18sp"
++                            android:textStyle="bold" />
++
++                        <TextView
++                            android:id="@+id/tvProject2Badge"
++                            android:layout_width="wrap_content"
++                            android:layout_height="wrap_content"
++                            android:layout_alignParentEnd="true"
++                            android:background="@drawable/bg_input"
++                            android:paddingHorizontal="10dp"
++                            android:paddingVertical="4dp"
++                            android:text="35%"
++                            android:textColor="@color/manager_crimson"
++                            android:textStyle="bold" />
++                    </RelativeLayout>
++
++                    <TextView
++                        android:id="@+id/tvProject2Location"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_marginTop="4dp"
++                        android:text="📍 Plot 14, Ring Road Extension"
++                        android:textColor="@color/grey_text"
++                        android:textSize="14sp" />
++
++                    <!-- Phase Status Subtitle -->
++                    <TextView
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_marginTop="10dp"
++                        android:text="Current Phase: Masonry Work"
++                        android:textColor="@color/ink"
++                        android:textSize="13sp"
++                        android:textStyle="bold" />
++
++                    <!-- Progress Bar -->
++                    <ProgressBar
++                        android:id="@+id/pbProject2"
++                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
++                        android:layout_width="match_parent"
++                        android:layout_height="8dp"
++                        android:layout_marginTop="8dp"
++                        android:progress="35"
++                        android:progressTint="@color/manager_crimson" />
++
++                    <Button
++                        android:id="@+id/btnManageProject2"
++                        android:layout_width="match_parent"
++                        android:layout_height="44dp"
++                        android:layout_marginTop="14dp"
++                        android:text="Manage Project"
++                        android:textAllCaps="false"
++                        android:textColor="@color/white"
++                        android:textStyle="bold"
++                        app:backgroundTint="@color/manager_crimson"
++                        app:cornerRadius="12dp" />
++                </LinearLayout>
++            </androidx.cardview.widget.CardView>
++
++
++            <!-- ================= NEW PROJECT CARD OPTION ================= -->
++            <androidx.cardview.widget.CardView
++                android:id="@+id/cardAddNewProject"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="24dp"
++                android:clickable="true"
++                android:focusable="true"
++                app:cardBackgroundColor="@color/white"
++                app:cardCornerRadius="16dp"
++                app:cardElevation="2dp">
++
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:gravity="center"
++                    android:orientation="vertical"
++                    android:padding="24dp">
++
++                    <TextView
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:text="➕ Add Another Project"
++                        android:textColor="@color/manager_crimson"
++                        android:textSize="16sp"
++                        android:textStyle="bold" />
++
++                    <TextView
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_marginTop="4dp"
++                        android:text="Create a new site to assign team &amp; track progress"
++                        android:textColor="@color/grey_text"
++                        android:textSize="12sp" />
++                </LinearLayout>
++            </androidx.cardview.widget.CardView>
++
++        </LinearLayout>
++    </ScrollView>
+ </RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/buildtrack_v1/CommentsActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/buildtrack_v1/CommentsActivity.java b/app/src/main/java/com/example/buildtrack_v1/CommentsActivity.java
+new file mode 100644
+--- /dev/null	(date 1792393080781)
++++ b/app/src/main/java/com/example/buildtrack_v1/CommentsActivity.java	(date 1792393080781)
+@@ -0,0 +1,28 @@
++package com.example.buildtrack_v1;
++
++import android.os.Bundle;
++import android.widget.Button;
++import android.widget.EditText;
++import android.widget.Toast;
++import androidx.appcompat.app.AppCompatActivity;
++
++public class CommentsActivity extends AppCompatActivity {
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_comments);
++
++        EditText etCommentInput = findViewById(R.id.etCommentInput);
++        Button btnSendComment = findViewById(R.id.btnSendComment);
++        Button btnBack = findViewById(R.id.btnBack);
++
++        btnBack.setOnClickListener(v -> finish());
++
++        btnSendComment.setOnClickListener(v -> {
++            String text = etCommentInput.getText().toString().trim();
++            if (text.isEmpty()) return;
++            Toast.makeText(this, "Comment sent to engineer!", Toast.LENGTH_SHORT).show();
++            etCommentInput.setText("");
++        });
++    }
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_post_update.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_post_update.xml b/app/src/main/res/layout/activity_post_update.xml
+new file mode 100644
+--- /dev/null	(date 1792393143944)
++++ b/app/src/main/res/layout/activity_post_update.xml	(date 1792393143944)
+@@ -0,0 +1,119 @@
++<?xml version="1.0" encoding="utf-8"?>
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:background="@color/manager_body">
++
++    <RelativeLayout
++        android:id="@+id/topBar"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:background="@drawable/bg_header_manager"
++        android:paddingStart="24dp"
++        android:paddingTop="56dp"
++        android:paddingEnd="24dp"
++        android:paddingBottom="32dp">
++
++        <TextView
++            android:id="@+id/tvRole"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="Post Update"
++            android:textColor="@color/manager_crimson_light"
++            android:textSize="28sp"
++            android:textStyle="bold" />
++
++        <TextView
++            android:layout_width="wrap_content"
++            android:layout_below="@id/tvRole"
++            android:layout_marginTop="4dp"
++            android:text="Site Photo for Buyers"
++            android:textColor="@color/white"
++            android:textSize="16sp"  android:layout_height="20dp"/>
++
++        <Button
++            android:id="@+id/btnBack"
++            android:layout_width="wrap_content"
++            android:layout_height="44dp"
++            android:layout_alignParentEnd="true"
++            android:text="Back"
++            android:textAllCaps="false"
++            android:textColor="@color/white"
++            android:textStyle="bold"
++            app:backgroundTint="@color/manager_crimson"
++            app:cornerRadius="14dp" />
++    </RelativeLayout>
++
++    <ScrollView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:layout_below="@id/topBar">
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="vertical"
++            android:padding="20dp">
++
++            <androidx.cardview.widget.CardView
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                app:cardBackgroundColor="@color/white"
++                app:cardCornerRadius="16dp"
++                app:cardElevation="2dp">
++
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:orientation="vertical"
++                    android:padding="18dp">
++
++                    <ImageView
++                        android:id="@+id/ivPreview"
++                        android:layout_width="match_parent"
++                        android:layout_height="220dp"
++                        android:background="@drawable/bg_input"
++                        android:scaleType="centerCrop"
++                        android:src="@android:drawable/ic_menu_camera" />
++
++                    <Button
++                        android:id="@+id/btnPickPhoto"
++                        android:layout_width="match_parent"
++                        android:layout_height="46dp"
++                        android:layout_marginTop="12dp"
++                        android:text="Select Photo"
++                        android:textAllCaps="false"
++                        android:textColor="@color/white"
++                        android:textStyle="bold"
++                        app:backgroundTint="@color/manager_crimson"
++                        app:cornerRadius="12dp" />
++
++                    <EditText
++                        android:id="@+id/etCaption"
++                        android:layout_width="match_parent"
++                        android:layout_height="100dp"
++                        android:layout_marginTop="16dp"
++                        android:background="@drawable/bg_input"
++                        android:gravity="top|start"
++                        android:hint="Describe the progress shown in this photo..."
++                        android:textColor="@color/ink"
++                        android:textSize="14sp" />
++
++                    <Button
++                        android:id="@+id/btnPublishUpdate"
++                        android:layout_width="match_parent"
++                        android:layout_height="50dp"
++                        android:layout_marginTop="16dp"
++                        android:text="Publish Update to Buyers"
++                        android:textAllCaps="false"
++                        android:textColor="@color/white"
++                        android:textSize="16sp"
++                        android:textStyle="bold"
++                        app:backgroundTint="@color/manager_crimson"
++                        app:cornerRadius="14dp" />
++                </LinearLayout>
++            </androidx.cardview.widget.CardView>
++        </LinearLayout>
++    </ScrollView>
++</RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/buildtrack_v1/PostUpdateActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/buildtrack_v1/PostUpdateActivity.java b/app/src/main/java/com/example/buildtrack_v1/PostUpdateActivity.java
+new file mode 100644
+--- /dev/null	(date 1792393233656)
++++ b/app/src/main/java/com/example/buildtrack_v1/PostUpdateActivity.java	(date 1792393233656)
+@@ -0,0 +1,50 @@
++package com.example.buildtrack_v1;
++
++import android.net.Uri;
++import android.os.Bundle;
++import android.widget.Button;
++import android.widget.EditText;
++import android.widget.ImageView;
++import android.widget.Toast;
++
++import androidx.activity.result.ActivityResultLauncher;
++import androidx.activity.result.contract.ActivityResultContracts;
++import androidx.appcompat.app.AppCompatActivity;
++
++public class PostUpdateActivity extends AppCompatActivity {
++
++    private ImageView ivPreview;
++    private EditText etCaption;
++
++    private final ActivityResultLauncher<String> galleryLauncher =
++            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
++                if (uri != null) {
++                    ivPreview.setImageURI(uri);
++                }
++            });
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_post_update);
++
++        ivPreview = findViewById(R.id.ivPreview);
++        etCaption = findViewById(R.id.etCaption);
++        Button btnPickPhoto = findViewById(R.id.btnPickPhoto);
++        Button btnPublishUpdate = findViewById(R.id.btnPublishUpdate);
++        Button btnBack = findViewById(R.id.btnBack);
++
++        btnBack.setOnClickListener(v -> finish());
++        btnPickPhoto.setOnClickListener(v -> galleryLauncher.launch("image/*"));
++
++        btnPublishUpdate.setOnClickListener(v -> {
++            String caption = etCaption.getText().toString().trim();
++            if (caption.isEmpty()) {
++                etCaption.setError("Enter a caption");
++                return;
++            }
++            Toast.makeText(this, "Site update published for buyers!", Toast.LENGTH_SHORT).show();
++            finish();
++        });
++    }
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_comments.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_comments.xml b/app/src/main/res/layout/activity_comments.xml
+new file mode 100644
+--- /dev/null	(date 1792393045689)
++++ b/app/src/main/res/layout/activity_comments.xml	(date 1792393045689)
+@@ -0,0 +1,138 @@
++<?xml version="1.0" encoding="utf-8"?>
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:background="@color/manager_body">
++
++    <RelativeLayout
++        android:id="@+id/topBar"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:background="@drawable/bg_header_manager"
++        android:paddingStart="24dp"
++        android:paddingTop="56dp"
++        android:paddingEnd="24dp"
++        android:paddingBottom="32dp">
++
++        <TextView
++            android:id="@+id/tvRole"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="Site Notes"
++            android:textColor="@color/manager_crimson_light"
++            android:textSize="28sp"
++            android:textStyle="bold" />
++
++        <TextView
++            android:layout_width="wrap_content"
++            android:layout_below="@id/tvRole"
++            android:layout_marginTop="4dp"
++            android:text="Notes &amp; Photos from Engineer"
++            android:textColor="@color/white"
++            android:textSize="16sp"  android:layout_height="20dp"/>
++
++        <Button
++            android:id="@+id/btnBack"
++            android:layout_width="wrap_content"
++            android:layout_height="44dp"
++            android:layout_alignParentEnd="true"
++            android:text="Back"
++            android:textAllCaps="false"
++            android:textColor="@color/white"
++            android:textStyle="bold"
++            app:backgroundTint="@color/manager_crimson"
++            app:cornerRadius="14dp" />
++    </RelativeLayout>
++
++    <!-- Bottom Input Area -->
++    <LinearLayout
++        android:id="@+id/bottomCommentInput"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:layout_alignParentBottom="true"
++        android:background="@color/white"
++        android:elevation="8dp"
++        android:orientation="horizontal"
++        android:padding="12dp">
++
++        <EditText
++            android:id="@+id/etCommentInput"
++            android:layout_width="0dp"
++            android:layout_height="46dp"
++            android:layout_weight="1"
++            android:background="@drawable/bg_input"
++            android:hint="Reply to engineer..."
++            android:paddingHorizontal="14dp"
++            android:textColor="@color/ink"
++            android:textSize="14sp" />
++
++        <Button
++            android:id="@+id/btnSendComment"
++            android:layout_width="wrap_content"
++            android:layout_height="46dp"
++            android:layout_marginStart="8dp"
++            android:text="Send"
++            android:textAllCaps="false"
++            android:textColor="@color/white"
++            android:textStyle="bold"
++            app:backgroundTint="@color/manager_crimson"
++            app:cornerRadius="12dp" />
++    </LinearLayout>
++
++    <ScrollView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:layout_above="@id/bottomCommentInput"
++        android:layout_below="@id/topBar">
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="vertical"
++            android:padding="16dp">
++
++            <!-- Card from Engineer with Site Photo -->
++            <androidx.cardview.widget.CardView
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="12dp"
++                app:cardBackgroundColor="@color/white"
++                app:cardCornerRadius="14dp"
++                app:cardElevation="2dp">
++
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:orientation="vertical"
++                    android:padding="14dp">
++
++                    <TextView
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:text="On-Site Engineer"
++                        android:textColor="@color/manager_crimson"
++                        android:textSize="15sp"
++                        android:textStyle="bold" />
++
++                    <ImageView
++                        android:id="@+id/ivEngineerPhoto"
++                        android:layout_width="match_parent"
++                        android:layout_height="180dp"
++                        android:layout_marginTop="8dp"
++                        android:background="@drawable/bg_input"
++                        android:scaleType="centerCrop"
++                        android:src="@android:drawable/ic_menu_gallery" />
++
++                    <TextView
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_marginTop="6dp"
++                        android:text="Ground floor pillar reinforcement done. Please review spacing."
++                        android:textColor="@color/ink"
++                        android:textSize="14sp" />
++                </LinearLayout>
++            </androidx.cardview.widget.CardView>
++        </LinearLayout>
++    </ScrollView>
++</RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/project_detail.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/project_detail.xml b/app/src/main/res/layout/project_detail.xml
+new file mode 100644
+--- /dev/null	(date 1792392762173)
++++ b/app/src/main/res/layout/project_detail.xml	(date 1792392762173)
+@@ -0,0 +1,203 @@
++<?xml version="1.0" encoding="utf-8"?>
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:background="@color/manager_body">
++
++    <!-- Top Bar -->
++    <RelativeLayout
++        android:id="@+id/topBar"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:background="@drawable/bg_header_manager"
++        android:paddingStart="24dp"
++        android:paddingTop="56dp"
++        android:paddingEnd="24dp"
++        android:paddingBottom="32dp">
++
++        <TextView
++            android:id="@+id/tvRole"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="Project Detail"
++            android:textColor="@color/manager_crimson_light"
++            android:textSize="28sp"
++            android:textStyle="bold" />
++
++        <TextView
++            android:id="@+id/tvProjectName"
++            android:layout_width="wrap_content"
++            android:layout_below="@id/tvRole"
++            android:layout_marginTop="4dp"
++            android:text="Skyline Towers - Phase 1"
++            android:textColor="@color/white"
++            android:textSize="16sp" />
++
++        <Button
++            android:id="@+id/btnBack"
++            android:layout_width="wrap_content"
++            android:layout_height="44dp"
++            android:layout_alignParentEnd="true"
++            android:text="Back"
++            android:textAllCaps="false"
++            android:textColor="@color/white"
++            android:textStyle="bold"
++            app:backgroundTint="@color/manager_crimson"
++            app:cornerRadius="14dp" />
++    </RelativeLayout>
++
++    <ScrollView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:layout_below="@id/topBar"
++        android:fillViewport="true">
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="vertical"
++            android:padding="20dp">
++
++            <!-- Overall Progress Card -->
++            <androidx.cardview.widget.CardView
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="16dp"
++                app:cardBackgroundColor="@color/white"
++                app:cardCornerRadius="16dp"
++                app:cardElevation="2dp">
++
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:orientation="vertical"
++                    android:padding="16dp">
++
++                    <TextView
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:text="Overall Project Completion"
++                        android:textColor="@color/ink"
++                        android:textSize="16sp"
++                        android:textStyle="bold" />
++
++                    <TextView
++                        android:id="@+id/tvOverallPercent"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_marginTop="6dp"
++                        android:text="68%"
++                        android:textColor="@color/manager_crimson"
++                        android:textSize="26sp"
++                        android:textStyle="bold" />
++
++                    <ProgressBar
++                        android:id="@+id/pbOverallDetail"
++                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
++                        android:layout_width="match_parent"
++                        android:layout_height="10dp"
++                        android:layout_marginTop="8dp"
++                        android:progress="68"
++                        android:progressTint="@color/manager_crimson" />
++                </LinearLayout>
++            </androidx.cardview.widget.CardView>
++
++            <!-- Quick Action Buttons -->
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="10dp"
++                android:text="Quick Actions"
++                android:textColor="@color/ink"
++                android:textSize="16sp"
++                android:textStyle="bold" />
++
++            <GridLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:columnCount="2"
++                android:rowCount="2">
++
++                <Button
++                    android:id="@+id/btnNavLogs"
++                    android:layout_width="0dp"
++                    android:layout_height="48dp"
++                    android:layout_columnWeight="1"
++                    android:layout_margin="4dp"
++                    android:text="Daily Logs"
++                    android:textAllCaps="false"
++                    android:textColor="@color/white"
++                    app:backgroundTint="@color/manager_crimson"
++                    app:cornerRadius="12dp" />
++
++                <Button
++                    android:id="@+id/btnNavAssign"
++                    android:layout_width="0dp"
++                    android:layout_height="48dp"
++                    android:layout_columnWeight="1"
++                    android:layout_margin="4dp"
++                    android:text="Assign Team"
++                    android:textAllCaps="false"
++                    android:textColor="@color/white"
++                    app:backgroundTint="@color/manager_crimson"
++                    app:cornerRadius="12dp" />
++
++                <Button
++                    android:id="@+id/btnNavComments"
++                    android:layout_width="0dp"
++                    android:layout_height="48dp"
++                    android:layout_columnWeight="1"
++                    android:layout_margin="4dp"
++                    android:text="Site Comments"
++                    android:textAllCaps="false"
++                    android:textColor="@color/white"
++                    app:backgroundTint="@color/manager_crimson"
++                    app:cornerRadius="12dp" />
++
++                <Button
++                    android:id="@+id/btnNavPostUpdate"
++                    android:layout_width="0dp"
++                    android:layout_height="48dp"
++                    android:layout_columnWeight="1"
++                    android:layout_margin="4dp"
++                    android:text="Post Photo"
++                    android:textAllCaps="false"
++                    android:textColor="@color/white"
++                    app:backgroundTint="@color/manager_crimson"
++                    app:cornerRadius="12dp" />
++            </GridLayout>
++
++            <!-- Phase Sliders -->
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginTop="20dp"
++                android:layout_marginBottom="12dp"
++                android:text="Construction Phases (Sliders)"
++                android:textColor="@color/ink"
++                android:textSize="16sp"
++                android:textStyle="bold" />
++
++            <LinearLayout
++                android:id="@+id/phasesContainer"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:orientation="vertical" />
++
++            <Button
++                android:id="@+id/btnSaveChanges"
++                android:layout_width="match_parent"
++                android:layout_height="50dp"
++                android:layout_marginTop="16dp"
++                android:layout_marginBottom="24dp"
++                android:text="Save Phase Progress"
++                android:textAllCaps="false"
++                android:textColor="@color/white"
++                android:textSize="16sp"
++                android:textStyle="bold"
++                app:backgroundTint="@color/manager_crimson"
++                app:cornerRadius="14dp" />
++        </LinearLayout>
++    </ScrollView>
++</RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/buildtrack_v1/ProjectDetailActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/buildtrack_v1/ProjectDetailActivity.java b/app/src/main/java/com/example/buildtrack_v1/ProjectDetailActivity.java
+new file mode 100644
+--- /dev/null	(date 1792393689384)
++++ b/app/src/main/java/com/example/buildtrack_v1/ProjectDetailActivity.java	(date 1792393689384)
+@@ -0,0 +1,148 @@
++package com.example.buildtrack_v1;
++
++import android.content.Intent;
++import android.os.Bundle;
++import android.widget.Button;
++import android.widget.LinearLayout;
++import android.widget.ProgressBar;
++import android.widget.SeekBar;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import androidx.appcompat.app.AppCompatActivity;
++
++import java.util.HashMap;
++import java.util.Map;
++
++public class ProjectDetailActivity extends AppCompatActivity {
++
++    private String projectId, projectName;
++    private TextView tvProjectName, tvOverallPercent;
++    private ProgressBar pbOverallDetail;
++    private LinearLayout phasesContainer;
++    private final Map<String, Integer> currentPhases = new HashMap<>();
++
++    private final String[] PHASE_NAMES = {
++            "Foundation",
++            "Framing & Structure",
++            "Masonry",
++            "Plumbing & Electrical",
++            "Finishing",
++            "Handover"
++    };
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.project_detail);
++
++        projectId = getIntent().getStringExtra("projectId");
++        projectName = getIntent().getStringExtra("projectName");
++
++        tvProjectName = findViewById(R.id.tvProjectName);
++        tvOverallPercent = findViewById(R.id.tvOverallPercent);
++        pbOverallDetail = findViewById(R.id.pbOverallDetail);
++        phasesContainer = findViewById(R.id.phasesContainer);
++        Button btnBack = findViewById(R.id.btnBack);
++        Button btnNavLogs = findViewById(R.id.btnNavLogs);
++        Button btnNavAssign = findViewById(R.id.btnNavAssign);
++        Button btnNavComments = findViewById(R.id.btnNavComments);
++        Button btnNavPostUpdate = findViewById(R.id.btnNavPostUpdate);
++        Button btnSaveChanges = findViewById(R.id.btnSaveChanges);
++
++        tvProjectName.setText(projectName != null ? projectName : "Project");
++
++        btnBack.setOnClickListener(v -> finish());
++
++        // Navigation to other Manager screens
++        btnNavLogs.setOnClickListener(v -> {
++            Intent intent = new Intent(this, LogsViewActivity.class);
++            intent.putExtra("projectId", projectId);
++            startActivity(intent);
++        });
++
++        btnNavAssign.setOnClickListener(v -> {
++            Intent intent = new Intent(this, AssignPeopleActivity.class);
++            intent.putExtra("projectId", projectId);
++            startActivity(intent);
++        });
++
++        btnNavComments.setOnClickListener(v -> {
++            Intent intent = new Intent(this, CommentsActivity.class);
++            intent.putExtra("projectId", projectId);
++            startActivity(intent);
++        });
++
++        btnNavPostUpdate.setOnClickListener(v -> {
++            Intent intent = new Intent(this, PostUpdateActivity.class);
++            intent.putExtra("projectId", projectId);
++            startActivity(intent);
++        });
++
++        // Initialize default sample phase values
++        currentPhases.put("Foundation", 100);
++        currentPhases.put("Framing & Structure", 100);
++        currentPhases.put("Masonry", 80);
++        currentPhases.put("Plumbing & Electrical", 60);
++        currentPhases.put("Finishing", 40);
++        currentPhases.put("Handover", 0);
++
++        populatePhaseSliders();
++        calculateOverall();
++
++        btnSaveChanges.setOnClickListener(v -> {
++            Toast.makeText(this, "Progress saved successfully!", Toast.LENGTH_SHORT).show();
++        });
++    }
++
++    private void populatePhaseSliders() {
++        phasesContainer.removeAllViews();
++        for (String phase : PHASE_NAMES) {
++            int currentVal = currentPhases.containsKey(phase) ? currentPhases.get(phase) : 0;
++
++            LinearLayout itemLayout = new LinearLayout(this);
++            itemLayout.setOrientation(LinearLayout.VERTICAL);
++            itemLayout.setBackgroundResource(R.drawable.bg_card);
++            itemLayout.setPadding(30, 24, 30, 24);
++            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
++                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
++            lp.bottomMargin = 16;
++            itemLayout.setLayoutParams(lp);
++
++            TextView title = new TextView(this);
++            title.setText(phase + ": " + currentVal + "%");
++            title.setTextColor(getResources().getColor(R.color.ink));
++            title.setTextSize(15);
++            title.setTypeface(null, android.graphics.Typeface.BOLD);
++
++            SeekBar seekBar = new SeekBar(this);
++            seekBar.setMax(100);
++            seekBar.setProgress(currentVal);
++
++            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
++                @Override
++                public void onProgressChanged(SeekBar sb, int progress, boolean fromUser) {
++                    currentPhases.put(phase, progress);
++                    title.setText(phase + ": " + progress + "%");
++                    calculateOverall();
++                }
++                @Override public void onStartTrackingTouch(SeekBar sb) {}
++                @Override public void onStopTrackingTouch(SeekBar sb) {}
++            });
++
++            itemLayout.addView(title);
++            itemLayout.addView(seekBar);
++            phasesContainer.addView(itemLayout);
++        }
++    }
++
++    private void calculateOverall() {
++        int total = 0;
++        for (String phase : PHASE_NAMES) {
++            total += currentPhases.containsKey(phase) ? currentPhases.get(phase) : 0;
++        }
++        int avg = total / PHASE_NAMES.length;
++        pbOverallDetail.setProgress(avg);
++        tvOverallPercent.setText(avg + "%");
++    }
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/item_daily_log.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/item_daily_log.xml b/app/src/main/res/layout/item_daily_log.xml
+new file mode 100644
+--- /dev/null	(date 1792392877780)
++++ b/app/src/main/res/layout/item_daily_log.xml	(date 1792392877780)
+@@ -0,0 +1,77 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content"
++    android:layout_marginBottom="14dp"
++    app:cardBackgroundColor="@color/white"
++    app:cardCornerRadius="14dp"
++    app:cardElevation="2dp">
++
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:orientation="vertical"
++        android:padding="16dp">
++
++        <RelativeLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content">
++
++            <TextView
++                android:id="@+id/tvLogDate"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:text="Oct 19, 2026"
++                android:textColor="@color/manager_crimson"
++                android:textSize="16sp"
++                android:textStyle="bold" />
++
++            <TextView
++                android:id="@+id/tvLabourCount"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_alignParentEnd="true"
++                android:text="Labour: 24 Workers"
++                android:textColor="@color/ink"
++                android:textStyle="bold" />
++        </RelativeLayout>
++
++        <View
++            android:layout_width="match_parent"
++            android:layout_height="1dp"
++            android:layout_marginVertical="10dp"
++            android:background="@color/grey_line" />
++
++        <TextView
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="Materials Used:"
++            android:textColor="@color/ink"
++            android:textStyle="bold" />
++
++        <TextView
++            android:id="@+id/tvMaterials"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="2dp"
++            android:text="Cement: 60 bags, TMT Steel: 2.5 Tons"
++            android:textColor="@color/ink" />
++
++        <TextView
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="8dp"
++            android:text="Notes / Obstacles:"
++            android:textColor="@color/ink"
++            android:textStyle="bold" />
++
++        <TextView
++            android:id="@+id/tvNotes"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="2dp"
++            android:text="Completed 4th floor column casting without delays."
++            android:textColor="@color/ink" />
++    </LinearLayout>
++</androidx.cardview.widget.CardView>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_logs_view.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_logs_view.xml b/app/src/main/res/layout/activity_logs_view.xml
+new file mode 100644
+--- /dev/null	(date 1792392918306)
++++ b/app/src/main/res/layout/activity_logs_view.xml	(date 1792392918306)
+@@ -0,0 +1,66 @@
++<?xml version="1.0" encoding="utf-8"?>
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:background="@color/manager_body">
++
++    <RelativeLayout
++        android:id="@+id/topBar"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:background="@drawable/bg_header_manager"
++        android:paddingStart="24dp"
++        android:paddingTop="56dp"
++        android:paddingEnd="24dp"
++        android:paddingBottom="32dp">
++
++        <TextView
++            android:id="@+id/tvRole"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="Engineer Logs"
++            android:textColor="@color/manager_crimson_light"
++            android:textSize="28sp"
++            android:textStyle="bold" />
++
++        <TextView
++            android:layout_width="wrap_content"
++            android:layout_below="@id/tvRole"
++            android:layout_marginTop="4dp"
++            android:text="Daily On-Site Reports"
++            android:textColor="@color/white"
++            android:textSize="16sp" />
++
++        <Button
++            android:id="@+id/btnBack"
++            android:layout_width="wrap_content"
++            android:layout_height="44dp"
++            android:layout_alignParentEnd="true"
++            android:text="Back"
++            android:textAllCaps="false"
++            android:textColor="@color/white"
++            android:textStyle="bold"
++            app:backgroundTint="@color/manager_crimson"
++            app:cornerRadius="14dp" />
++    </RelativeLayout>
++
++    <ScrollView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:layout_below="@id/topBar">
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="vertical"
++            android:padding="16dp">
++
++            <!-- Sample visible log 1 -->
++            <include layout="@layout/item_daily_log" />
++
++            <!-- Sample visible log 2 -->
++            <include layout="@layout/item_daily_log" />
++        </LinearLayout>
++    </ScrollView>
++</RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_assign_people.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_assign_people.xml b/app/src/main/res/layout/activity_assign_people.xml
+new file mode 100644
+--- /dev/null	(date 1792392946508)
++++ b/app/src/main/res/layout/activity_assign_people.xml	(date 1792392946508)
+@@ -0,0 +1,165 @@
++<?xml version="1.0" encoding="utf-8"?>
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:background="@color/manager_body">
++
++    <RelativeLayout
++        android:id="@+id/topBar"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:background="@drawable/bg_header_manager"
++        android:paddingStart="24dp"
++        android:paddingTop="56dp"
++        android:paddingEnd="24dp"
++        android:paddingBottom="32dp">
++
++        <TextView
++            android:id="@+id/tvRole"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="Assign Team"
++            android:textColor="@color/manager_crimson_light"
++            android:textSize="28sp"
++            android:textStyle="bold" />
++
++        <TextView
++            android:layout_width="wrap_content"
++            android:layout_below="@id/tvRole"
++            android:layout_marginTop="4dp"
++            android:text="Attach Engineers &amp; Buyers"
++            android:textColor="@color/white"
++            android:textSize="16sp" />
++
++        <Button
++            android:id="@+id/btnBack"
++            android:layout_width="wrap_content"
++            android:layout_height="44dp"
++            android:layout_alignParentEnd="true"
++            android:text="Back"
++            android:textAllCaps="false"
++            android:textColor="@color/white"
++            android:textStyle="bold"
++            app:backgroundTint="@color/manager_crimson"
++            app:cornerRadius="14dp" />
++    </RelativeLayout>
++
++    <ScrollView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:layout_below="@id/topBar">
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="vertical"
++            android:padding="20dp">
++
++            <!-- FORM 1: Attach Engineer -->
++            <androidx.cardview.widget.CardView
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="20dp"
++                app:cardBackgroundColor="@color/white"
++                app:cardCornerRadius="16dp"
++                app:cardElevation="2dp">
++
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:orientation="vertical"
++                    android:padding="18dp">
++
++                    <TextView
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:text="1. Assign On-Site Engineer"
++                        android:textColor="@color/ink"
++                        android:textSize="16sp"
++                        android:textStyle="bold" />
++
++                    <EditText
++                        android:id="@+id/etEngineerEmail"
++                        android:layout_width="match_parent"
++                        android:layout_height="48dp"
++                        android:layout_marginTop="14dp"
++                        android:background="@drawable/bg_input"
++                        android:hint="Engineer Registered Email"
++                        android:inputType="textEmailAddress"
++                        android:textColor="@color/ink"
++                        android:textSize="14sp" />
++
++                    <Button
++                        android:id="@+id/btnAssignEngineer"
++                        android:layout_width="match_parent"
++                        android:layout_height="46dp"
++                        android:layout_marginTop="12dp"
++                        android:text="Attach Engineer"
++                        android:textAllCaps="false"
++                        android:textColor="@color/white"
++                        android:textStyle="bold"
++                        app:backgroundTint="@color/manager_crimson"
++                        app:cornerRadius="12dp" />
++                </LinearLayout>
++            </androidx.cardview.widget.CardView>
++
++            <!-- FORM 2: Attach Buyer to Flat -->
++            <androidx.cardview.widget.CardView
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                app:cardBackgroundColor="@color/white"
++                app:cardCornerRadius="16dp"
++                app:cardElevation="2dp">
++
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:orientation="vertical"
++                    android:padding="18dp">
++
++                    <TextView
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:text="2. Attach Buyer to Flat"
++                        android:textColor="@color/ink"
++                        android:textSize="16sp"
++                        android:textStyle="bold" />
++
++                    <EditText
++                        android:id="@+id/etFlatNumber"
++                        android:layout_width="match_parent"
++                        android:layout_height="48dp"
++                        android:layout_marginTop="14dp"
++                        android:background="@drawable/bg_input"
++                        android:hint="Flat / Unit Number (e.g. A-402)"
++                        android:textColor="@color/ink"
++                        android:textSize="14sp" />
++
++                    <EditText
++                        android:id="@+id/etBuyerEmail"
++                        android:layout_width="match_parent"
++                        android:layout_height="48dp"
++                        android:layout_marginTop="10dp"
++                        android:background="@drawable/bg_input"
++                        android:hint="Buyer Registered Email"
++                        android:inputType="textEmailAddress"
++                        android:textColor="@color/ink"
++                        android:textSize="14sp" />
++
++                    <Button
++                        android:id="@+id/btnAttachBuyer"
++                        android:layout_width="match_parent"
++                        android:layout_height="46dp"
++                        android:layout_marginTop="12dp"
++                        android:text="Link Buyer Account"
++                        android:textAllCaps="false"
++                        android:textColor="@color/white"
++                        android:textStyle="bold"
++                        app:backgroundTint="@color/manager_crimson"
++                        app:cornerRadius="12dp" />
++                </LinearLayout>
++            </androidx.cardview.widget.CardView>
++        </LinearLayout>
++    </ScrollView>
++</RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/buildtrack_v1/AssignPeopleActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/buildtrack_v1/AssignPeopleActivity.java b/app/src/main/java/com/example/buildtrack_v1/AssignPeopleActivity.java
+new file mode 100644
+--- /dev/null	(date 1792392983998)
++++ b/app/src/main/java/com/example/buildtrack_v1/AssignPeopleActivity.java	(date 1792392983998)
+@@ -0,0 +1,46 @@
++package com.example.buildtrack_v1;
++
++import android.os.Bundle;
++import android.widget.Button;
++import android.widget.EditText;
++import android.widget.Toast;
++import androidx.appcompat.app.AppCompatActivity;
++
++public class AssignPeopleActivity extends AppCompatActivity {
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_assign_people);
++
++        EditText etEngineerEmail = findViewById(R.id.etEngineerEmail);
++        EditText etFlatNumber = findViewById(R.id.etFlatNumber);
++        EditText etBuyerEmail = findViewById(R.id.etBuyerEmail);
++        Button btnAssignEngineer = findViewById(R.id.btnAssignEngineer);
++        Button btnAttachBuyer = findViewById(R.id.btnAttachBuyer);
++        Button btnBack = findViewById(R.id.btnBack);
++
++        btnBack.setOnClickListener(v -> finish());
++
++        btnAssignEngineer.setOnClickListener(v -> {
++            String email = etEngineerEmail.getText().toString().trim();
++            if (email.isEmpty()) {
++                etEngineerEmail.setError("Enter engineer email");
++                return;
++            }
++            Toast.makeText(this, "Engineer " + email + " attached to project!", Toast.LENGTH_SHORT).show();
++            etEngineerEmail.setText("");
++        });
++
++        btnAttachBuyer.setOnClickListener(v -> {
++            String flat = etFlatNumber.getText().toString().trim();
++            String buyer = etBuyerEmail.getText().toString().trim();
++            if (flat.isEmpty() || buyer.isEmpty()) {
++                Toast.makeText(this, "Fill in both Flat and Buyer Email", Toast.LENGTH_SHORT).show();
++                return;
++            }
++            Toast.makeText(this, "Buyer linked to flat " + flat + "!", Toast.LENGTH_SHORT).show();
++            etFlatNumber.setText("");
++            etBuyerEmail.setText("");
++        });
++    }
++}
+Index: app/src/main/java/com/example/buildtrack_v1/LogsViewActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/buildtrack_v1/LogsViewActivity.java b/app/src/main/java/com/example/buildtrack_v1/LogsViewActivity.java
+new file mode 100644
+--- /dev/null	(date 1792393468684)
++++ b/app/src/main/java/com/example/buildtrack_v1/LogsViewActivity.java	(date 1792393468684)
+@@ -0,0 +1,16 @@
++package com.example.buildtrack_v1;
++
++import android.os.Bundle;
++import android.widget.Button;
++import androidx.appcompat.app.AppCompatActivity;
++
++public class LogsViewActivity extends AppCompatActivity {
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_logs_view);
++
++        Button btnBack = findViewById(R.id.btnBack);
++        btnBack.setOnClickListener(v -> finish());
++    }
++}
+\ No newline at end of file
