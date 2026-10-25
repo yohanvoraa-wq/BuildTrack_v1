@@ -555,9 +555,9 @@ As the mean of the six stage values that the engineer and manager maintain. Noth
 
 | Member | Contribution |
 |---|---|
-| **Yohan Vora** (team lead) | Architecture, Firebase integration, engineer and buyer modules, chat, documents, photo zoom, camera and gallery, multi-flat buyers, final integration and presentation |
+| **Yohan Vora** (Team Lead) | Architecture, Firebase integration, photo zoom, camera and gallery, multi-flat buyers, final integration and presentation |
 | **Ruddhima Patil** | Manager screens and workflow |
-| **Aadi Samal** | Engineer and buyer screens, presentation draft |
+| **Aadi Samal** | Engineer and buyer screens, presentation draft, engineer and buyer modules, chat, documents, |
 
 **Course:** Mobile Application Development · B.Tech AI & Data Science, Semester V · NMIMS
 **Faculty:** Dr. Preeti Gupta
